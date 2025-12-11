@@ -1,9 +1,5 @@
 GLOBAL.setmetatable(env,{__index=function(t,k) return GLOBAL.rawget(GLOBAL,k) end})
 
-if GetModConfigData("ModifySnowmanDecorateLimit") then
-    TUNING.SNOWMAN_MAX_DECOR = { 9999, 9999, 9999 }
-end
-
 local extra_decorations = {
     watermelon_cooked = { canflip = true },
     asparagus_cooked = { canflip = true },
@@ -71,6 +67,15 @@ local function CreateDecor(itemdata, rot, flip, ...)
     return inst
 end
 debug.setupvalue(_DoDecor, i, CreateDecor)
+
+if GetModConfigData("ModifySnowmanDecorateLimit") then
+    TUNING.SNOWMAN_MAX_DECOR = { 9999, 9999, 9999 }
+end
+
+local ModifySnowmanStackHeight = GetModConfigData("ModifySnowmanStackHeight") or 6
+if ModifySnowmanStackHeight > 6 then
+    UpvalueUtil.SetUpvalue(SnowmanDecoratable.CanStack, "MAX_STACK_HEIGHT", ModifySnowmanStackHeight)
+end
 
 ----------------------------------------------------------------------------------------------------------------
 -----------------------------------------[[SnowmanDecoratingScreen]]--------------------------------------------

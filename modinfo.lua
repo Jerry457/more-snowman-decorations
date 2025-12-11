@@ -48,6 +48,18 @@ local boolean_options = {
     {description = "关闭", data = false}
 }
 
+local function get_numer_options(min, max, step)
+    step = step or 1
+
+    local options = {}
+    local i = 1
+    for num = min, max, step do
+        options[i] = {description = num, data = num}
+        i = i + 1
+    end
+    return options
+end
+
 configuration_options = {
     {
         name = "ModifySnowmanDecorateLimit",
@@ -55,5 +67,12 @@ configuration_options = {
         hover = en_zh("Modify the maximum number of snowman decorations", "修改雪人装饰的最大数量"),
         options = boolean_options,
         default = false,
+    },
+    {
+        name = "ModifySnowmanStackHeight",
+        label = en_zh("Modify the maximum number of snowman stack height", "修改雪人装饰的最大堆叠高度"),
+        hover = en_zh("Modify the maximum number of snowman stack height", "修改雪人装饰的最大堆叠高度"),
+        options = get_numer_options(6, 31, 1),
+        default = 6,
     },
 }
