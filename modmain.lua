@@ -1,3 +1,5 @@
+GLOBAL.setmetatable(env,{__index=function(t,k) return GLOBAL.rawget(GLOBAL,k) end})
+
 local extra_decorations = {
     watermelon_cooked = { canflip = true },
     asparagus_cooked = { canflip = true },
@@ -14,7 +16,13 @@ local extra_decorations = {
 Assets = {
     Asset("ANIM", "anim/item_rotate.zip"),
 }
+
+local UpvalueUtil = require("upvalueutil")
+local SnowmanDecoratable = require("components/snowmandecoratable")
+
+local ITEM_DATA = UpvalueUtil.GetUpvalue(SnowmanDecoratable.GetItemData, "ITEM_DATA")
 for prefab, data in pairs(extra_decorations) do
+    ITEM_DATA[hash(prefab)] = data
     data.name = prefab
     data.bank = data.bank or "item_rotate"
     data.build = data.build or (prefab .. "_decoration")
@@ -25,19 +33,7 @@ for prefab, data in pairs(extra_decorations) do
     end
 
     table.insert(Assets, Asset("ANIM", "anim/" .. data.build .. ".zip"))
-end
 
-local AddPrefabPostInit = AddPrefabPostInit
-GLOBAL.setfenv(1, GLOBAL)
-
-local UpvalueUtil = require("upvalueutil")
-
-local SnowmanDecoratingScreen = require("screens/redux/snowmandecoratingscreen")
-local SnowmanDecoratable = require("components/snowmandecoratable")
-
-local ITEM_DATA = UpvalueUtil.GetUpvalue(SnowmanDecoratable.GetItemData, "ITEM_DATA")
-for prefab, data in pairs(extra_decorations) do
-    ITEM_DATA[hash(prefab)] = data
     AddPrefabPostInit(prefab, function(inst)
         if not TheWorld.ismastersim then
             return
@@ -68,10 +64,14 @@ local _CreateDecor, i, _DoDecor = UpvalueUtil.GetUpvalue(SnowmanDecoratable.Appl
 local function CreateDecor(itemdata, rot, flip, ...)
     local inst = _CreateDecor(itemdata, rot, flip, ...)
     UseCustomAnimation(itemdata, inst.AnimState, flip, rot)
-
     return inst
 end
 debug.setupvalue(_DoDecor, i, CreateDecor)
+
+----------------------------------------------------------------------------------------------------------------
+-----------------------------------------[[SnowmanDecoratingScreen]]--------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+local SnowmanDecoratingScreen = require("screens/redux/snowmandecoratingscreen")
 
 local _StartDraggingItem = SnowmanDecoratingScreen.StartDraggingItem
 function SnowmanDecoratingScreen:StartDraggingItem(obj, ...)
@@ -123,5 +123,3 @@ function SnowmanDecoratingScreen:FlipDraggingItem(...)
         UseCustomAnimation(self.dragitem.itemdata, self.dragitem:GetAnimState(), self.dragitem.flip, self.dragitem.rot)
     end
 end
-
--- TUNING.SNOWMAN_MAX_DECOR = {}
