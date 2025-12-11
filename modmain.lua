@@ -1,5 +1,9 @@
 GLOBAL.setmetatable(env,{__index=function(t,k) return GLOBAL.rawget(GLOBAL,k) end})
 
+if GetModConfigData("ModifySnowmanDecorateLimit") then
+    TUNING.SNOWMAN_MAX_DECOR = { 9999, 9999, 9999 }
+end
+
 local extra_decorations = {
     watermelon_cooked = { canflip = true },
     asparagus_cooked = { canflip = true },

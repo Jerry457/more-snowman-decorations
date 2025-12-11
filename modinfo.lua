@@ -6,7 +6,7 @@ end
 -- This information tells other players more about the mod
 version = "1.0.0" -- mod版本 上传mod需要两次的版本不一样
 name = en_zh("More snowman decorations", "更多雪人装饰物")  ---mod名字
-description = en_zh("V".. version .. 
+description = en_zh("V".. version ..
  "\n󰀏This MOD adds more decorations to the snowman, and new items will continue to be added in the future.\n󰀌And consider increasing the flexibility of the decorations.\n󰀅Stay tuned.",
  "V" ..version.. "\n󰀏这个MOD为雪人添加了更多装饰物，并且后续仍会继续添加新物品。\n󰀌并且考虑增加装饰物的灵活度，敬请期待。"
 )  --mod描述
@@ -43,4 +43,17 @@ icon = "modicon.tex"
 server_filter_tags = {  --服务器标签
 }
 
-configuration_options = {} --mod设置
+local boolean_options = {
+    {description = "开启", data = true},
+    {description = "关闭", data = false}
+}
+
+configuration_options = {
+    {
+        name = "ModifySnowmanDecorateLimit",
+        label = en_zh("Modify the maximum number of snowman decorations", "修改雪人装饰的最大数量"),
+        hover = en_zh("Modify the maximum number of snowman decorations", "修改雪人装饰的最大数量"),
+        options = boolean_options,
+        default = false,
+    },
+}
