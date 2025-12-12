@@ -4,7 +4,6 @@ local extra_decorations = {
     watermelon_cooked = { canflip = true },
     asparagus_cooked = { canflip = true },
     nightmarefuel = {
-        bank = "nightmarefuel_decoration",
         canflip = true,
         custom_animation = {
             use_point_filtering = true,
