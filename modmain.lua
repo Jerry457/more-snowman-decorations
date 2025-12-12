@@ -24,7 +24,7 @@ local ITEM_DATA = UpvalueUtil.GetUpvalue(SnowmanDecoratable.GetItemData, "ITEM_D
 for prefab, data in pairs(extra_decorations) do
     ITEM_DATA[hash(prefab)] = data
     data.name = prefab
-    data.bank = data.bank or "item_rotate"
+    data.bank = data.bank or (data.custom_animation and (prefab .. "_decoration") or "item_rotate")
     data.build = data.build or (prefab .. "_decoration")
     data.anim = data.anim or "snowman_decor"
 
@@ -81,6 +81,56 @@ end
 -----------------------------------------[[SnowmanDecoratingScreen]]--------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 local SnowmanDecoratingScreen = require("screens/redux/snowmandecoratingscreen")
+local TrueScrollList = require("widgets/truescrolllist")
+
+local IMG_SCALE = 0.75
+local DISPLAY_MAX_HEIGH = 550
+AddClassPostConstruct("screens/redux/snowmandecoratingscreen", function(self, owner, target, obj)
+    local height = self:GetStackHeight() * IMG_SCALE
+
+    -- if height <= DISPLAY_MAX_HEIGH then
+    --     return
+    -- end
+
+    local root = self.root
+    local snowmanroot = self.snowmanroot
+    root.scrollbar_height = DISPLAY_MAX_HEIGH
+    root.scrollbar_offset = { 300, 20 }
+
+    root.end_pos = 20
+    root.scroll_per_click = 1
+    root.current_scroll_pos = root.end_pos / 2
+
+    TrueScrollList.BuildScrollBar(root)
+    root.GetSlideStart = TrueScrollList.GetSlideStart
+    root.GetSlideRange = TrueScrollList.GetSlideRange
+    root.GetPositionScale = TrueScrollList.GetPositionScale
+    root.DoDragScroll = TrueScrollList.DoDragScroll
+
+    function root:Scroll(scroll_step)
+        self.current_scroll_pos = math.clamp(self.current_scroll_pos + scroll_step, 1, self.end_pos)
+        self:RefreshView()
+    end
+
+    function root:RefreshView()
+        self.position_marker:SetPosition(0, self:GetSlideStart() - self:GetPositionScale() * self:GetSlideRange())
+        snowmanroot:SetPosition(0, -height + height * self:GetPositionScale())
+        -- snowmanroot:SetPosition(0, -height + DISPLAY_MAX_HEIGH / 2 + (height - DISPLAY_MAX_HEIGH) * self:GetPositionScale())
+    end
+
+    root:RefreshView()
+end)
+
+function SnowmanDecoratingScreen:GetStackHeight()
+	local height = 0
+	for i, snowball in ipairs(self.stacks) do
+		height = snowball.ypos
+        if snowball.stackdata then
+            height = height + snowball.stackdata.heights[1]
+        end
+	end
+    return height
+end
 
 local _StartDraggingItem = SnowmanDecoratingScreen.StartDraggingItem
 function SnowmanDecoratingScreen:StartDraggingItem(obj, ...)
