@@ -62,7 +62,7 @@ AddComponentPostInit("snowmandecoratable", function(self, inst)
     end
 end)
 
-local function UseCustomAnimation(itemdata, inst, flip, rot)
+local function UseCustomAnimation(inst, itemdata, flip, rot)
     if itemdata.light then
         if not inst.Light then
             inst.entity:AddLight()
@@ -109,13 +109,16 @@ local function UseCustomAnimation(itemdata, inst, flip, rot)
         inst.AnimState:SetFrame(rot - 1)
         inst.AnimState:Pause()
     end
-    inst.AnimState:PlayAnimation(animation, true)
+
+    if itemdata.fn then
+        itemdata.fn(inst, itemdata)
+    end
 end
 
 local _CreateDecor, i, _DoDecor = UpvalueUtil.GetUpvalue(SnowmanDecoratable.ApplyDecor, "_DoDecor.CreateDecor")
 local function CreateDecor(itemdata, rot, flip, ...)
     local inst = SpawnPrefab("snowman_decorate")
-    UseCustomAnimation(itemdata, inst, flip, rot)
+    UseCustomAnimation(inst, itemdata, flip, rot)
     return inst
 end
 debug.setupvalue(_DoDecor, i, CreateDecor)
@@ -187,13 +190,13 @@ end
 local _StartDraggingItem = SnowmanDecoratingScreen.StartDraggingItem
 function SnowmanDecoratingScreen:StartDraggingItem(obj, ...)
     _StartDraggingItem(self, obj, ...)
-    UseCustomAnimation(self.dragitem.itemdata, self.dragitem.inst, self.dragitem.flip, self.dragitem.rot)
+    UseCustomAnimation(self.dragitem.inst, self.dragitem.itemdata, self.dragitem.flip, self.dragitem.rot)
 end
 
 local _DoAddItemAt = SnowmanDecoratingScreen.DoAddItemAt
 function SnowmanDecoratingScreen:DoAddItemAt(x, y, itemhash, itemdata, rot, flip, ...) --snowball local space
     local decor = _DoAddItemAt(self, x, y, itemhash, itemdata, rot, flip, ...)
-    UseCustomAnimation(itemdata, decor.inst, flip, rot)
+    UseCustomAnimation(decor.inst, itemdata, flip, rot)
     return decor
 end
 
@@ -231,7 +234,7 @@ function SnowmanDecoratingScreen:FlipDraggingItem(...)
         self.dragitem.flip = not self.dragitem.flip
         local rot = ((num_rots - self.dragitem.rot + 1) % num_rots) + 1
         self.dragitem.rot = rot
-        UseCustomAnimation(self.dragitem.itemdata, self.dragitem.inst, self.dragitem.flip, self.dragitem.rot)
+        UseCustomAnimation(self.dragitem.inst, self.dragitem.itemdata, self.dragitem.flip, self.dragitem.rot)
     else
         _FlipDraggingItem(self, ...)
     end

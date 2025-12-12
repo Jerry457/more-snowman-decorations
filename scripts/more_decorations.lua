@@ -1,3 +1,14 @@
+local function winter_ornament_light_flash(inst, itemdata)
+    if not TheWorld.ismastersim then
+        return
+    end
+    inst.AnimState:OverrideSymbol("item", itemdata.build, "light_on")
+    inst:DoPeriodicTask(1.2, function()
+        local light = not inst.Light:IsEnabled()
+        inst.AnimState:OverrideSymbol("item", itemdata.build, "light_" .. (light and "on" or "off"))
+        inst.Light:Enable(light)
+    end)
+end
 
 local MoreDecorations = {
     watermelon = { canflip = true },
@@ -28,7 +39,7 @@ local MoreDecorations = {
             radius = 0.5,
             colour = Vector3(255, 25.5, 25.5),
         },
-        custom_animation_num_rots = 16,
+        fn = winter_ornament_light_flash
     },
 }
 return MoreDecorations
