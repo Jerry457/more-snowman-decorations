@@ -1,35 +1,7 @@
-local function winter_ornament_light_flash(inst, itemdata)
-    inst.AnimState:OverrideSymbol("item", itemdata.build, "light_on")
-    if not TheWorld.ismastersim then
-        return
-    end
-    inst:DoPeriodicTask(1.2, function()
-        local light = not inst.Light:IsEnabled()
-        inst.AnimState:OverrideSymbol("item", itemdata.build, "light_" .. (light and "on" or "off"))
-        inst.Light:Enable(light)
-    end)
-end
-
 local MoreDecorations = {
     watermelon = { canflip = true },
     watermelon_cooked = { canflip = true },
     asparagus_cooked = { canflip = true },
-    lightbulb = {
-        canflip = true,
-        bloome_ffect = "shaders/anim.ksh",
-        light = {
-            falloff = 0.7,
-            intensity = 0.5,
-            radius = 0.5,
-            colour = Vector3(237, 237, 209),
-        },
-    },
-    nightmarefuel = {
-        canflip = true,
-        custom_animation_num_rots = 16,
-        use_point_filtering = true,
-        mult_colour = { 1, 1, 1, 0.5 },
-    },
     winter_ornament_plain1 = { canflip = true },
     winter_ornament_plain2 = { canflip = true },
     winter_ornament_plain3 = { canflip = true },
@@ -89,16 +61,59 @@ local MoreDecorations = {
     winter_ornament_festivalevents3 = { canflip = true },
     winter_ornament_festivalevents4 = { canflip = true },
     winter_ornament_festivalevents5 = { canflip = true },
-    winter_ornament_light1 = {
+    lightbulb = {
         canflip = true,
         bloome_ffect = "shaders/anim.ksh",
         light = {
             falloff = 0.7,
             intensity = 0.5,
             radius = 0.5,
-            colour = Vector3(255, 25.5, 25.5),
+            colour = Vector3(237, 237, 209),
         },
-        fn = winter_ornament_light_flash
+    },
+    nightmarefuel = {
+        canflip = true,
+        custom_animation_num_rots = 16,
+        use_point_filtering = true,
+        mult_colour = { 1, 1, 1, 0.5 },
     },
 }
+
+local winter_ornament_light_colours = {
+    Vector3(255, 25.5, 25.5),
+    Vector3(25.5, 255, 25.5),
+    Vector3(127.5, 127.5, 255),
+    Vector3(255, 255, 255),
+    Vector3(255, 25.5, 25.5),
+    Vector3(25.5, 255, 25.5),
+    Vector3(127.5, 127.5, 255),
+    Vector3(255, 255, 255),
+}
+
+local function winter_ornament_light_flash(inst, itemdata)
+    inst.AnimState:OverrideSymbol("item", itemdata.build, "light_on")
+    if not TheWorld.ismastersim then
+        return
+    end
+    inst:DoPeriodicTask(1.2, function()
+        local light = not inst.Light:IsEnabled()
+        inst.AnimState:OverrideSymbol("item", itemdata.build, "light_" .. (light and "on" or "off"))
+        inst.Light:Enable(light)
+    end)
+end
+
+for i, colour in ipairs(winter_ornament_light_colours) do
+    MoreDecorations["winter_ornament_light" .. i] = {
+        canflip = true,
+        bloome_ffect = "shaders/anim.ksh",
+        light = {
+            falloff = 0.7,
+            intensity = 0.5,
+            radius = 0.5,
+            colour = colour,
+        },
+        fn = winter_ornament_light_flash
+    }
+end
+
 return MoreDecorations
