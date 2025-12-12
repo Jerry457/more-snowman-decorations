@@ -11,7 +11,7 @@ PrefabFiles = {
 local UpvalueUtil = require("upvalueutil")
 local SnowmanDecoratable = require("components/snowmandecoratable")
 
-local MoreDecorations = require("scripts/more_decorations")
+local MoreDecorations = require("more_decorations")
 local ITEM_DATA = UpvalueUtil.GetUpvalue(SnowmanDecoratable.GetItemData, "ITEM_DATA")
 for prefab, data in pairs(MoreDecorations) do
     ITEM_DATA[hash(prefab)] = data
@@ -100,7 +100,7 @@ end
 
 local _CreateDecor, i, _DoDecor = UpvalueUtil.GetUpvalue(SnowmanDecoratable.ApplyDecor, "_DoDecor.CreateDecor")
 local function CreateDecor(itemdata, rot, flip, ...)
-    local inst = SpawnPrefab("snowman_decor")
+    local inst = SpawnPrefab("snowman_decorate")
     UseCustomAnimation(itemdata, inst, flip, rot)
     return inst
 end
