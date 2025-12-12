@@ -4,6 +4,7 @@ local extra_decorations = {
     watermelon = { canflip = true },
     watermelon_cooked = { canflip = true },
     asparagus_cooked = { canflip = true },
+    winter_ornament_light1 = { canflip = true },
     lightbulb = {
         canflip = true,
         light = {
