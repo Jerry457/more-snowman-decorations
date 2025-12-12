@@ -4,7 +4,7 @@ local extra_decorations = {
     watermelon = { canflip = true },
     watermelon_cooked = { canflip = true },
     asparagus_cooked = { canflip = true },
-    lightbulb_decoration = { canflip = true },
+    lightbulb = { canflip = true },
     nightmarefuel = {
         canflip = true,
         custom_animation = {
