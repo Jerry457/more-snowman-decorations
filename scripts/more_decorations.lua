@@ -84,6 +84,11 @@ local MoreDecorations = {
     winter_ornament_shadowthralls = { canflip = true },
     winter_ornament_boss_hermithouse = { canflip = true },
     winter_ornament_boss_pearl = { canflip = true },
+    winter_ornament_festivalevents1 = { canflip = true },
+    winter_ornament_festivalevents2 = { canflip = true },
+    winter_ornament_festivalevents3 = { canflip = true },
+    winter_ornament_festivalevents4 = { canflip = true },
+    winter_ornament_festivalevents5 = { canflip = true },
     winter_ornament_light1 = {
         canflip = true,
         bloome_ffect = "shaders/anim.ksh",
