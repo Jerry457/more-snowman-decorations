@@ -103,7 +103,9 @@ local function UseCustomAnimation(itemdata, inst, flip, rot)
     if itemdata.custom_animation_num_rots then
         animation = animation .. "_" .. (rot - 1)
         inst.AnimState:Resume()
+        inst.AnimState:PlayAnimation(animation, true)
     else
+        inst.AnimState:PlayAnimation(animation)
         inst.AnimState:SetFrame(rot - 1)
         inst.AnimState:Pause()
     end
@@ -224,11 +226,13 @@ end
 
 local _FlipDraggingItem = SnowmanDecoratingScreen.FlipDraggingItem
 function SnowmanDecoratingScreen:FlipDraggingItem(...)
-    local num_rots = self.dragitem.itemdata.custom_animation_num_rots or 1
-    local rot = ((num_rots - self.dragitem.rot + 1) % num_rots) + 1
-    _FlipDraggingItem(self, ...)
-    if self.dragitem and self.dragitem.itemdata.custom_animation_num_rots then
+    local num_rots = self.dragitem.itemdata.custom_animation_num_rots
+    if self.dragitem and num_rots then
+        self.dragitem.flip = not self.dragitem.flip
+        local rot = ((num_rots - self.dragitem.rot + 1) % num_rots) + 1
         self.dragitem.rot = rot
         UseCustomAnimation(self.dragitem.itemdata, self.dragitem.inst, self.dragitem.flip, self.dragitem.rot)
+    else
+        _FlipDraggingItem(self, ...)
     end
 end
