@@ -1,13 +1,17 @@
 GLOBAL.setmetatable(env,{__index=function(t,k) return GLOBAL.rawget(GLOBAL,k) end})
 
-modimport("main/main/glassic_api_loader")
+modimport("main/glassic_api_loader.lua")
+modimport("main/prefab_skins.lua")
+modimport("main/snowman.lua")
 
 Assets = {
     Asset("ANIM", "anim/item_rotate.zip"),
 }
 
 PrefabFiles = {
+    "snow_skins",
     "snowman_decorate",
+    "snowman_stack",
 }
 
 local SnowmanDecoratable = require("components/snowmandecoratable")
@@ -31,6 +35,10 @@ for prefab, data in pairs(MoreDecorations) do
     end)
 end
 
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------[[Snowmandecoratable Component]]----------------------------------------
+----------------------------------------------------------------------------------------------------------------
+
 local function GetEventCallbacks(inst, event, source, source_file, test_fn)
     source = source or inst
 
@@ -52,16 +60,54 @@ end
 
 AddComponentPostInit("snowmandecoratable", function(self, inst)
     self.decors = {}
+    self.stackskins = {}
 
     if not self.ismastersim then
         local OnDecorDataDirty_Client = GetEventCallbacks(inst, "decordatadirty")
         inst:RemoveEventCallback("decordatadirty", OnDecorDataDirty_Client)
+
+        local OnStacksDirty_Client = GetEventCallbacks(inst, "stacksdirty")
+        inst:RemoveEventCallback("stacksdirty", OnStacksDirty_Client)
     else
         inst:ListenForEvent("decordatadirty", function()
             inst.components.snowmandecoratable:DoRefreshDecorData()
         end)
+        -- inst:ListenForEvent("decordatadirty", function()
+        --     inst.components.snowmandecoratable:OnStacksChanged("clientsync")
+        -- end)
     end
 end)
+
+function SnowmanDecoratable:GetStackSkins()
+    return self.stackskins
+end
+
+local _Stack = SnowmanDecoratable.Stack
+function SnowmanDecoratable:Stack(doer, obj, ...)
+	if not self.ismastersim or not obj.components.snowmandecoratable then
+		return
+    end
+
+    table.insert(self.stackskins, obj.skin_type or "")
+    -- local data, references = obj:GetPersistData()
+    _Stack(self, doer, obj, ...)
+end
+
+local _OnSave = SnowmanDecoratable.OnSave
+function SnowmanDecoratable:OnSave(...)
+    local data, references = _OnSave(self, ...)
+    data = data or {}
+    data.stackskins = self.stackskins
+    return data, references
+end
+
+local _OnLoad = SnowmanDecoratable.OnLoad
+function SnowmanDecoratable:OnLoad(data, newents, ...)
+    if data then
+        self.stackskins = data.stackskins
+    end
+    return _OnLoad(self, data, newents, ...)
+end
 
 local function UseCustomAnimation(inst, itemdata, flip, rot)
     if itemdata.light then
