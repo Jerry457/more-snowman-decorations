@@ -27,6 +27,10 @@ Assets = {
     Asset("ANIM", "anim/item_rotate.zip"),
 }
 
+PrefabFiles = {
+    "snowman_decorate",
+}
+
 local UpvalueUtil = require("upvalueutil")
 local SnowmanDecoratable = require("components/snowmandecoratable")
 
@@ -52,16 +56,37 @@ for prefab, data in pairs(extra_decorations) do
     end)
 end
 
-local function UseCustomAnimation(itemdata, inst, flip, rot)
-    local custom_animation = itemdata.custom_animation
-    if not custom_animation then
+local function GetEventCallbacks(inst, event, source, source_file, test_fn)
+    source = source or inst
+
+    if not inst.event_listening[event] or not inst.event_listening[event][source] then
         return
     end
 
-    local animation = itemdata.anim .. (flip and itemdata.canflip and "_flip_" or "_") .. (rot - 1)
-    inst.AnimState:PlayAnimation(animation, true)
-    if custom_animation.mult_colour then
-        inst.AnimState:SetMultColour(unpack(custom_animation.mult_colour))
+    for _, fn in ipairs(inst.event_listening[event][source]) do
+        if source_file then
+            local info = debug.getinfo(fn, "S")
+            if info and (info.source == source_file) and (not test_fn or test_fn(fn)) then
+                return fn
+            end
+        elseif (not test_fn or test_fn(fn)) then
+            return fn
+        end
+    end
+end
+
+AddComponentPostInit("snowmandecoratable", function(self, inst)
+    self.decors = {}
+
+    if not self.ismastersim then
+        local OnDecorDataDirty_Client = GetEventCallbacks(inst, "decordatadirty")
+        inst:RemoveEventCallback("decordatadirty", OnDecorDataDirty_Client)
+    else
+        inst:ListenForEvent("decordatadirty", function()
+            inst.components.snowmandecoratable:DoRefreshDecorData()
+        end)
+    end
+end)
     end
     if custom_animation.use_point_filtering then
         inst.AnimState:UsePointFiltering(true)
@@ -79,7 +104,7 @@ end
 
 local _CreateDecor, i, _DoDecor = UpvalueUtil.GetUpvalue(SnowmanDecoratable.ApplyDecor, "_DoDecor.CreateDecor")
 local function CreateDecor(itemdata, rot, flip, ...)
-    local inst = _CreateDecor(itemdata, rot, flip, ...)
+    local inst = SpawnPrefab("snowman_decor")
     UseCustomAnimation(itemdata, inst, flip, rot)
     return inst
 end
