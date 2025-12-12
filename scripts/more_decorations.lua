@@ -1,5 +1,5 @@
 
-local extra_decorations = {
+local MoreDecorations = {
     watermelon = { canflip = true },
     watermelon_cooked = { canflip = true },
     asparagus_cooked = { canflip = true },
@@ -21,5 +21,4 @@ local extra_decorations = {
         mult_colour = { 1, 1, 1, 0.5 },
     },
 }
-
-return extra_decorations
+return MoreDecorations
