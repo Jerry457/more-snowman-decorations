@@ -67,10 +67,22 @@ local function UseCustomAnimation(itemdata, inst, flip, rot)
         if not inst.Light then
             inst.entity:AddLight()
         end
-        inst.Light:SetFalloff(itemdata.light.falloff or 1)
-        inst.Light:SetIntensity(itemdata.light.intensity or 1)
-        inst.Light:SetRadius(itemdata.light.radius or 2)
-        inst.Light:SetColour(unpack(itemdata.colour or {1, 1, 1, 1}))
+        if itemdata.light.falloff ~= nil then
+            inst.Light:SetFalloff(itemdata.light.falloff)
+        end
+        if itemdata.light.intensity ~= nil then
+            inst.Light:SetIntensity(itemdata.light.intensity)
+        end
+        if itemdata.light.radius ~= nil then
+            inst.Light:SetRadius(itemdata.light.radius)
+        end
+        if itemdata.light.radius ~= nil then
+            inst.Light:SetRadius(itemdata.light.radius)
+        end
+        if itemdata.light.colour ~= nil then
+            inst.Light:SetColour((itemdata.light.colour / 255):Get())
+        end
+
         inst.Light:Enable(true)
     end
 
