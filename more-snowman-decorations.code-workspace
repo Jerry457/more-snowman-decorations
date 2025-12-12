@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../data/scripts"
+		},
+		{
+			"path": "../../data/anim"
+		}
+	],
+	"settings": {}
+}

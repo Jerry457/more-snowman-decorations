@@ -1,5 +1,7 @@
 GLOBAL.setmetatable(env,{__index=function(t,k) return GLOBAL.rawget(GLOBAL,k) end})
 
+modimport("main/main/glassic_api_loader")
+
 Assets = {
     Asset("ANIM", "anim/item_rotate.zip"),
 }
@@ -8,11 +10,10 @@ PrefabFiles = {
     "snowman_decorate",
 }
 
-local UpvalueUtil = require("upvalueutil")
 local SnowmanDecoratable = require("components/snowmandecoratable")
 
 local MoreDecorations = require("more_decorations")
-local ITEM_DATA = UpvalueUtil.GetUpvalue(SnowmanDecoratable.GetItemData, "ITEM_DATA")
+local ITEM_DATA = GlassicAPI.UpvalueUtil.GetUpvalue(SnowmanDecoratable.GetItemData, "ITEM_DATA")
 for prefab, data in pairs(MoreDecorations) do
     ITEM_DATA[hash(prefab)] = data
     data.name = prefab
@@ -115,7 +116,7 @@ local function UseCustomAnimation(inst, itemdata, flip, rot)
     end
 end
 
-local _CreateDecor, i, _DoDecor = UpvalueUtil.GetUpvalue(SnowmanDecoratable.ApplyDecor, "_DoDecor.CreateDecor")
+local _CreateDecor, i, _DoDecor = GlassicAPI.UpvalueUtil.GetUpvalue(SnowmanDecoratable.ApplyDecor, "_DoDecor.CreateDecor")
 local function CreateDecor(itemdata, rot, flip, ...)
     local inst = SpawnPrefab("snowman_decorate")
     UseCustomAnimation(inst, itemdata, flip, rot)
@@ -129,7 +130,7 @@ end
 
 local ModifySnowmanStackHeight = GetModConfigData("ModifySnowmanStackHeight") or 6
 if ModifySnowmanStackHeight > 6 then
-    UpvalueUtil.SetUpvalue(SnowmanDecoratable.CanStack, "MAX_STACK_HEIGHT", ModifySnowmanStackHeight)
+    GlassicAPI.UpvalueUtil.SetUpvalue(SnowmanDecoratable.CanStack, "MAX_STACK_HEIGHT", ModifySnowmanStackHeight)
 end
 
 ----------------------------------------------------------------------------------------------------------------
