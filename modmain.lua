@@ -1,35 +1,24 @@
 GLOBAL.setmetatable(env,{__index=function(t,k) return GLOBAL.rawget(GLOBAL,k) end})
 
-local extra_decorations = {
-    watermelon_cooked = { canflip = true },
-    asparagus_cooked = { canflip = true },
-    nightmarefuel = {
-        canflip = true,
-        custom_animation = {
-            use_point_filtering = true,
-            mult_colour = { 1, 1, 1, 0.5 },
-        },
-    }
-}
-
 Assets = {
     Asset("ANIM", "anim/item_rotate.zip"),
+}
+
+PrefabFiles = {
+    "snowman_decorate",
 }
 
 local UpvalueUtil = require("upvalueutil")
 local SnowmanDecoratable = require("components/snowmandecoratable")
 
+local MoreDecorations = require("more_decorations")
 local ITEM_DATA = UpvalueUtil.GetUpvalue(SnowmanDecoratable.GetItemData, "ITEM_DATA")
-for prefab, data in pairs(extra_decorations) do
+for prefab, data in pairs(MoreDecorations) do
     ITEM_DATA[hash(prefab)] = data
     data.name = prefab
-    data.bank = data.bank or (data.custom_animation and (prefab .. "_decoration") or "item_rotate")
+    data.bank = data.bank or (data.custom_animation_num_rots and (prefab .. "_decoration") or "item_rotate")
     data.build = data.build or (prefab .. "_decoration")
     data.anim = data.anim or "snowman_decor"
-
-    if data.custom_animation then
-        data.custom_animation.num_rots = data.custom_animation.num_rots or 16
-    end
 
     table.insert(Assets, Asset("ANIM", "anim/" .. data.build .. ".zip"))
 
@@ -41,28 +30,90 @@ for prefab, data in pairs(extra_decorations) do
     end)
 end
 
-local function UseCustomAnimation(itemdata, AnimState, flip, rot)
-    local custom_animation = itemdata.custom_animation
-    if not custom_animation then
+local function GetEventCallbacks(inst, event, source, source_file, test_fn)
+    source = source or inst
+
+    if not inst.event_listening[event] or not inst.event_listening[event][source] then
         return
     end
 
-    local animation = itemdata.anim .. (flip and itemdata.canflip and "_flip_" or "_") .. (rot - 1)
-    AnimState:PlayAnimation(animation, true)
-    if custom_animation.mult_colour then
-        AnimState:SetMultColour(unpack(custom_animation.mult_colour))
+    for _, fn in ipairs(inst.event_listening[event][source]) do
+        if source_file then
+            local info = debug.getinfo(fn, "S")
+            if info and (info.source == source_file) and (not test_fn or test_fn(fn)) then
+                return fn
+            end
+        elseif (not test_fn or test_fn(fn)) then
+            return fn
+        end
     end
-    if custom_animation.use_point_filtering then
-        AnimState:UsePointFiltering(true)
+end
+
+AddComponentPostInit("snowmandecoratable", function(self, inst)
+    self.decors = {}
+
+    if not self.ismastersim then
+        local OnDecorDataDirty_Client = GetEventCallbacks(inst, "decordatadirty")
+        inst:RemoveEventCallback("decordatadirty", OnDecorDataDirty_Client)
+    else
+        inst:ListenForEvent("decordatadirty", function()
+            inst.components.snowmandecoratable:DoRefreshDecorData()
+        end)
+    end
+end)
+
+local function UseCustomAnimation(itemdata, inst, flip, rot)
+    if itemdata.light then
+        if not inst.Light then
+            inst.entity:AddLight()
+        end
+        if itemdata.light.falloff ~= nil then
+            inst.Light:SetFalloff(itemdata.light.falloff)
+        end
+        if itemdata.light.intensity ~= nil then
+            inst.Light:SetIntensity(itemdata.light.intensity)
+        end
+        if itemdata.light.radius ~= nil then
+            inst.Light:SetRadius(itemdata.light.radius)
+        end
+        if itemdata.light.radius ~= nil then
+            inst.Light:SetRadius(itemdata.light.radius)
+        end
+        if itemdata.light.colour ~= nil then
+            inst.Light:SetColour((itemdata.light.colour / 255):Get())
+        end
+
+        inst.Light:Enable(true)
     end
 
-    AnimState:Resume()
+    inst.AnimState:SetBank(itemdata.bank)
+    inst.AnimState:SetBuild(itemdata.build)
+
+    if itemdata.mult_colour then
+        inst.AnimState:SetMultColour(unpack(itemdata.mult_colour))
+    end
+    if itemdata.use_point_filtering then
+        inst.AnimState:UsePointFiltering(true)
+    end
+    if itemdata.bloome_ffect then
+        inst.AnimState:SetBloomEffectHandle(itemdata.bloome_ffect)
+    end
+
+    local animation = itemdata.anim..(flip and itemdata.canflip and "_flip" or "")
+    if itemdata.custom_animation_num_rots then
+        animation = animation .. "_" .. (rot - 1)
+        inst.AnimState:Resume()
+    else
+        inst.AnimState:SetFrame(rot - 1)
+        inst.AnimState:Pause()
+    end
+    inst.AnimState:PlayAnimation(animation, true)
 end
 
 local _CreateDecor, i, _DoDecor = UpvalueUtil.GetUpvalue(SnowmanDecoratable.ApplyDecor, "_DoDecor.CreateDecor")
 local function CreateDecor(itemdata, rot, flip, ...)
-    local inst = _CreateDecor(itemdata, rot, flip, ...)
-    UseCustomAnimation(itemdata, inst.AnimState, flip, rot)
+    local inst = SpawnPrefab("snowman_decorate")
+    UseCustomAnimation(itemdata, inst, flip, rot)
     return inst
 end
 debug.setupvalue(_DoDecor, i, CreateDecor)
@@ -121,33 +172,33 @@ AddClassPostConstruct("screens/redux/snowmandecoratingscreen", function(self, ow
 end)
 
 function SnowmanDecoratingScreen:GetStackHeight()
-	local height = 0
-	for i, snowball in ipairs(self.stacks) do
-		height = snowball.ypos
+    local height = 0
+    for i, snowball in ipairs(self.stacks) do
+        height = snowball.ypos
         if snowball.stackdata then
             height = height + snowball.stackdata.heights[1]
         end
-	end
+    end
     return height
 end
 
 local _StartDraggingItem = SnowmanDecoratingScreen.StartDraggingItem
 function SnowmanDecoratingScreen:StartDraggingItem(obj, ...)
     _StartDraggingItem(self, obj, ...)
-    UseCustomAnimation(self.dragitem.itemdata, self.dragitem:GetAnimState(), self.dragitem.flip, self.dragitem.rot)
+    UseCustomAnimation(self.dragitem.itemdata, self.dragitem.inst, self.dragitem.flip, self.dragitem.rot)
 end
 
 local _DoAddItemAt = SnowmanDecoratingScreen.DoAddItemAt
 function SnowmanDecoratingScreen:DoAddItemAt(x, y, itemhash, itemdata, rot, flip, ...) --snowball local space
     local decor = _DoAddItemAt(self, x, y, itemhash, itemdata, rot, flip, ...)
-    UseCustomAnimation(itemdata, decor:GetAnimState(), flip, rot)
+    UseCustomAnimation(itemdata, decor.inst, flip, rot)
     return decor
 end
 
 local _CanRotateDraggingItem = SnowmanDecoratingScreen.CanRotateDraggingItem
 function SnowmanDecoratingScreen:CanRotateDraggingItem(...)
-    if self.dragitem and self.dragitem.itemdata.custom_animation then
-        return self.dragitem ~= nil and self.dragitem.shown and self.dragitem.itemdata.custom_animation.num_rots > 1
+    if self.dragitem and self.dragitem.itemdata.custom_animation_num_rots then
+        return self.dragitem ~= nil and self.dragitem.shown and self.dragitem.itemdata.custom_animation_num_rots > 1
     end
     return _CanRotateDraggingItem(self, ...)
 end
@@ -155,8 +206,8 @@ end
 local _RotateDraggingItem = SnowmanDecoratingScreen.RotateDraggingItem
 function SnowmanDecoratingScreen:RotateDraggingItem(delta, ...)
     local itemdata = self.dragitem.itemdata
-    if self.dragitem and itemdata.custom_animation then
-        local num_rots = itemdata.custom_animation.num_rots
+    if self.dragitem and itemdata.custom_animation_num_rots then
+        local num_rots = itemdata.custom_animation_num_rots
         self.dragitem.rot = self.dragitem.rot + delta
         while self.dragitem.rot > num_rots do
             self.dragitem.rot = self.dragitem.rot - num_rots
@@ -173,11 +224,11 @@ end
 
 local _FlipDraggingItem = SnowmanDecoratingScreen.FlipDraggingItem
 function SnowmanDecoratingScreen:FlipDraggingItem(...)
-    local num_rots = self.dragitem.itemdata.custom_animation and self.dragitem.itemdata.custom_animation.num_rots or 1
+    local num_rots = self.dragitem.itemdata.custom_animation_num_rots or 1
     local rot = ((num_rots - self.dragitem.rot + 1) % num_rots) + 1
     _FlipDraggingItem(self, ...)
-    if self.dragitem and self.dragitem.itemdata.custom_animation then
+    if self.dragitem and self.dragitem.itemdata.custom_animation_num_rots then
         self.dragitem.rot = rot
-        UseCustomAnimation(self.dragitem.itemdata, self.dragitem:GetAnimState(), self.dragitem.flip, self.dragitem.rot)
+        UseCustomAnimation(self.dragitem.itemdata, self.dragitem.inst, self.dragitem.flip, self.dragitem.rot)
     end
 end
