@@ -1,8 +1,8 @@
 local function winter_ornament_light_flash(inst, itemdata)
+    inst.AnimState:OverrideSymbol("item", itemdata.build, "light_on")
     if not TheWorld.ismastersim then
         return
     end
-    inst.AnimState:OverrideSymbol("item", itemdata.build, "light_on")
     inst:DoPeriodicTask(1.2, function()
         local light = not inst.Light:IsEnabled()
         inst.AnimState:OverrideSymbol("item", itemdata.build, "light_" .. (light and "on" or "off"))
