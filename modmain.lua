@@ -4,7 +4,15 @@ local extra_decorations = {
     watermelon = { canflip = true },
     watermelon_cooked = { canflip = true },
     asparagus_cooked = { canflip = true },
-    lightbulb = { canflip = true },
+    lightbulb = {
+        canflip = true,
+        light = {
+            falloff = 0.7,
+            intensity = 0.5,
+            radius = 0.5,
+            colour = {237 / 255, 237 / 255, 209 / 255}
+        }
+    },
     nightmarefuel = {
         canflip = true,
         custom_animation = {
@@ -43,28 +51,35 @@ for prefab, data in pairs(extra_decorations) do
     end)
 end
 
-local function UseCustomAnimation(itemdata, AnimState, flip, rot)
+local function UseCustomAnimation(itemdata, inst, flip, rot)
     local custom_animation = itemdata.custom_animation
     if not custom_animation then
         return
     end
 
     local animation = itemdata.anim .. (flip and itemdata.canflip and "_flip_" or "_") .. (rot - 1)
-    AnimState:PlayAnimation(animation, true)
+    inst.AnimState:PlayAnimation(animation, true)
     if custom_animation.mult_colour then
-        AnimState:SetMultColour(unpack(custom_animation.mult_colour))
+        inst.AnimState:SetMultColour(unpack(custom_animation.mult_colour))
     end
     if custom_animation.use_point_filtering then
-        AnimState:UsePointFiltering(true)
+        inst.AnimState:UsePointFiltering(true)
     end
 
-    AnimState:Resume()
+    inst.entity:AddLight()
+    inst.Light:SetFalloff(custom_animation.light.falloff or 1)
+    inst.Light:SetIntensity(custom_animation.light.intensity or 1)
+    inst.Light:SetRadius(custom_animation.light.radius or 2)
+    inst.Light:SetColour(unpack(custom_animation.colour or {1, 1, 1, 1}))
+    inst.Light:Enable(true)
+
+    inst.AnimState:Resume()
 end
 
 local _CreateDecor, i, _DoDecor = UpvalueUtil.GetUpvalue(SnowmanDecoratable.ApplyDecor, "_DoDecor.CreateDecor")
 local function CreateDecor(itemdata, rot, flip, ...)
     local inst = _CreateDecor(itemdata, rot, flip, ...)
-    UseCustomAnimation(itemdata, inst.AnimState, flip, rot)
+    UseCustomAnimation(itemdata, inst, flip, rot)
     return inst
 end
 debug.setupvalue(_DoDecor, i, CreateDecor)
@@ -136,13 +151,13 @@ end
 local _StartDraggingItem = SnowmanDecoratingScreen.StartDraggingItem
 function SnowmanDecoratingScreen:StartDraggingItem(obj, ...)
     _StartDraggingItem(self, obj, ...)
-    UseCustomAnimation(self.dragitem.itemdata, self.dragitem:GetAnimState(), self.dragitem.flip, self.dragitem.rot)
+    UseCustomAnimation(self.dragitem.itemdata, self.dragitem.inst, self.dragitem.flip, self.dragitem.rot)
 end
 
 local _DoAddItemAt = SnowmanDecoratingScreen.DoAddItemAt
 function SnowmanDecoratingScreen:DoAddItemAt(x, y, itemhash, itemdata, rot, flip, ...) --snowball local space
     local decor = _DoAddItemAt(self, x, y, itemhash, itemdata, rot, flip, ...)
-    UseCustomAnimation(itemdata, decor:GetAnimState(), flip, rot)
+    UseCustomAnimation(itemdata, decor.inst, flip, rot)
     return decor
 end
 
@@ -180,6 +195,6 @@ function SnowmanDecoratingScreen:FlipDraggingItem(...)
     _FlipDraggingItem(self, ...)
     if self.dragitem and self.dragitem.itemdata.custom_animation then
         self.dragitem.rot = rot
-        UseCustomAnimation(self.dragitem.itemdata, self.dragitem:GetAnimState(), self.dragitem.flip, self.dragitem.rot)
+        UseCustomAnimation(self.dragitem.itemdata, self.dragitem.inst, self.dragitem.flip, self.dragitem.rot)
     end
 end
