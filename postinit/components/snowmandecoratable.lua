@@ -62,7 +62,7 @@ end
 local _OnLoad = SnowmanDecoratable.OnLoad
 function SnowmanDecoratable:OnLoad(data, newents, ...)
     if data then
-        self.stackskins = data.stackskins
+        self.stackskins = data.stackskins or {}
     end
     return _OnLoad(self, data, newents, ...)
 end
