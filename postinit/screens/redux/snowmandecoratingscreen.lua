@@ -8,6 +8,15 @@ local TrueScrollList = require("widgets/truescrolllist")
 local IMG_SCALE = 0.75
 local DISPLAY_MAX_HEIGH = 550
 AddClassPostConstruct("screens/redux/snowmandecoratingscreen", function(self, owner, target, obj)
+    if target and target.components.snowmandecoratable then
+        self:OnStacksChange(target)
+        self.inst:ListenForEvent("stacksdirty", function()
+            self.inst:DoTaskInTime(0, function()
+                self:OnStacksChange(target)
+            end)
+        end, target)
+    end
+
     local height = self:GetStackHeight() * IMG_SCALE
 
     -- if height <= DISPLAY_MAX_HEIGH then
@@ -42,6 +51,17 @@ AddClassPostConstruct("screens/redux/snowmandecoratingscreen", function(self, ow
 
     root:RefreshView()
 end)
+
+function SnowmanDecoratingScreen:OnStacksChange(target)
+    local stackskins = target.components.snowmandecoratable:GetStackSkins()
+    for i, snowball in ipairs(self.stacks) do
+        local build = target.AnimState:GetBuild()
+        if i > 1 then
+            build = target.default_build .. "_" .. stackskins[i - 1]
+        end
+        snowball:GetAnimState():SetBuild(build)
+    end
+end
 
 function SnowmanDecoratingScreen:GetStackHeight()
     local height = 0

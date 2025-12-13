@@ -19,9 +19,15 @@ if ModifySnowmanStackHeight > 6 then
     GlassicAPI.UpvalueUtil.SetUpvalue(SnowmanDecoratable.CanStack, "MAX_STACK_HEIGHT", ModifySnowmanStackHeight)
 end
 
+local function OnSkinsChanged(inst) -- for open snowmandecoratingscreen
+    local value = inst.components.snowmandecoratable.stackskins:value()
+    inst.components.snowmandecoratable.stackskins:set_local(value)
+    inst.components.snowmandecoratable.stackskins:set(value)
+end
+
 AddComponentPostInit("snowmandecoratable", function(self, inst)
     self.decors = {}
-    self.stackskins = {}
+    self.stackskins = net_string(inst.GUID, "snowmandecoratable.stackskins", "stacksdirty")
 
     if not self.ismastersim then
         local OnDecorDataDirty_Client = GetEventCallbacks(inst, "decordatadirty")
@@ -37,10 +43,16 @@ AddComponentPostInit("snowmandecoratable", function(self, inst)
         --     inst.components.snowmandecoratable:OnStacksChanged("clientsync")
         -- end)
     end
+
+    self.inst:ListenForEvent("onskinschanged", OnSkinsChanged)
 end)
 
+function SnowmanDecoratable:SetStackSkins(stackskins)
+    self.stackskins:set(ZipAndEncodeString(stackskins))
+end
+
 function SnowmanDecoratable:GetStackSkins()
-    return self.stackskins
+    return DecodeAndUnzipString(self.stackskins:value()) or {}
 end
 
 function SnowmanDecoratable:Unstack(isdestroyed)
@@ -49,8 +61,9 @@ function SnowmanDecoratable:Unstack(isdestroyed)
     end
     local x, y, z = self.inst.Transform:GetWorldPosition()
     local pt = self.inst:GetPosition()
+    local stackskins = self:GetStackSkins()
     for i, v in ipairs(self.stacks:value()) do
-        local skin_type = self.stackskins[i]
+        local skin_type = stackskins[i]
         if v == STACK_IDS.small then
             local item = self:DoDropItem("snowball_item", x, z)
             SetSnowmanSkin(item, skin_type)
@@ -94,7 +107,9 @@ function SnowmanDecoratable:Stack(doer, obj, ...)
         return
     end
 
-    table.insert(self.stackskins, obj.skin_type or "")
+    local stackskins = self:GetStackSkins()
+    table.insert(stackskins, obj.skin_type or "")
+    self:SetStackSkins(stackskins)
     -- local data, references = obj:GetPersistData()
     _Stack(self, doer, obj, ...)
 end
@@ -103,14 +118,14 @@ local _OnSave = SnowmanDecoratable.OnSave
 function SnowmanDecoratable:OnSave(...)
     local data, references = _OnSave(self, ...)
     data = data or {}
-    data.stackskins = self.stackskins
+    data.stackskins = self.stackskins:value()
     return data, references
 end
 
 local _OnLoad = SnowmanDecoratable.OnLoad
 function SnowmanDecoratable:OnLoad(data, newents, ...)
     if data then
-        self.stackskins = data.stackskins or {}
+        self.stackskins:set(data.stackskins or "")
     end
     return _OnLoad(self, data, newents, ...)
 end

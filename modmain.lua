@@ -37,6 +37,7 @@ end
 for k, prefab in pairs(snowman_utils.SnowmanPrefabs) do
     AddPrefabPostInit(prefab, function(inst)
         inst:AddTag("snowman")
+        inst.default_build = "snowball"
     end)
 end
 

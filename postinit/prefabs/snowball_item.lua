@@ -8,7 +8,6 @@ AddPrefabPostInit("snowball_item", function(inst)
         return
     end
 
-	inst:AddComponent("pushable")
 	local OnStartPushing = inst.components.pushable.onstartpushingfn
     inst.components.pushable.onstartpushingfn = function(...)
         SpawnSnowmanHook(inst.skin_type, OnStartPushing, ...)
