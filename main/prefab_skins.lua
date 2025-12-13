@@ -1,27 +1,21 @@
 GLOBAL.setfenv(1, GLOBAL)
 
-SnowPrefabs = {
-    "snowman",
-    "snowball_item",
-    "snowman_stack",
-}
-
-SnowSkins = {
-    "dungball",
-}
+local snowman_utils = require("snowman_utils")
+local SnowmanPrefabs = snowman_utils.SnowmanPrefabs
+local SnowmanSkins = snowman_utils.SnowmanSkins
 
 local skins = {}
 
-for _, snow_prefab in ipairs(SnowPrefabs) do
-    _G[snow_prefab .. "_clear_fn"] = function(inst)
+for _, prefab in ipairs(SnowmanPrefabs) do
+    _G[prefab .. "_clear_fn"] = function(inst)
         basic_clear_fn(inst, "snowball")
         inst.skin_type = nil
         inst:PushEvent("onskinschanged")
     end
 
-    skins[snow_prefab] = {}
-    for i, skin_type in ipairs(SnowSkins) do
-        table.insert(skins[snow_prefab], snow_prefab .. "_" .. skin_type)
+    skins[prefab] = {}
+    for i, skin_type in ipairs(SnowmanSkins) do
+        table.insert(skins[prefab], prefab .. "_" .. skin_type)
     end
 end
 

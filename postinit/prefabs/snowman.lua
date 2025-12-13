@@ -1,6 +1,7 @@
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
+local SetSnowmanSkin = require("snowman_utils").SetSnowmanSkin
 local SnowmanDecoratable = require("components/snowmandecoratable")
 
 local CheckLiftAndPushable
@@ -62,17 +63,14 @@ local function OnStacksChanged(inst, stacks, stackoffsets, reason)
                             stackskins[i] = ent.skin_type or ""
                         end)
                         local userid = nil
-                        local skin_type = stackskins[i]
-                        if skin_type and skin_type ~= "" then
-                            TheSim:ReskinEntity(ent.GUID, ent.prefab .. "_" ..  skin_type, ent.prefab .. "_" ..  skin_type)
-                        end
+                        SetSnowmanSkin(ent, stackskins[i])
                         ent.entity:SetParent(inst.entity)
                         local offset = SnowmanDecoratable.CalculateStackOffset(stackdata.r, stackoffsets[i])
                         ent.Follower:FollowSymbol(inst.GUID, "snowman_ball", offset, -height, 0, true)
                         inst.stacks[n] = ent
                         table.insert(inst.highlightchildren, ent)
                     end
-                    ent.AnimState:PlayAnimation((v > laststackid and "stack_clean_" or "stack_")..stackdata.name)
+                    ent.AnimState:PlayAnimation((v > laststackid and "stack_clean_" or "stack_") .. stackdata.name)
 
                     laststackid = v
                     laststackdata = stackdata
@@ -111,6 +109,7 @@ AddPrefabPostInit("snowman", function(inst)
     if not TheWorld.ismastersim then
         return
     end
+
     inst.components.equippable:SetOnEquip(OnEquip)
 	inst.components.equippable:SetOnUnequip(OnUnequip)
 end)

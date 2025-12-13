@@ -1,7 +1,11 @@
 local prefabs = {}
 
-for _, snow_prefab in ipairs(SnowPrefabs) do
-    for i, skin_type in ipairs(SnowSkins) do
+local snowman_utils = require("snowman_utils")
+local SnowmanPrefabs = snowman_utils.SnowmanPrefabs
+local SnowmanSkins = snowman_utils.SnowmanSkins
+
+for _, snow_prefab in ipairs(SnowmanPrefabs) do
+    for i, skin_type in ipairs(SnowmanSkins) do
         local skin_build = "snowball_" .. skin_type
 
         table.insert(prefabs, CreatePrefabSkin(snow_prefab .. "_" .. skin_type, {
