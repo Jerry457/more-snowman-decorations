@@ -1,5 +1,6 @@
 local files = {
     "postinit/components/snowmandecoratable.lua",
+    "postinit/prefabs/snowball_item.lua",
     "postinit/prefabs/snowman.lua",
     "postinit/screens/redux/snowmandecoratingscreen.lua"
 }

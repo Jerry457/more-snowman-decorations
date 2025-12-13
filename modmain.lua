@@ -1,19 +1,18 @@
-GLOBAL.setmetatable(env,{__index=function(t,k) return GLOBAL.rawget(GLOBAL,k) end})
 
 modimport("main/glassic_api_loader.lua")
 modimport("main/prefab_skins.lua")
 modimport("main/postinit.lua")
+modimport("main/prefab_files.lua")
 
 Assets = {
     Asset("ANIM", "anim/item_rotate.zip"),
 }
 
-PrefabFiles = {
-    "snowman_skins",
-    "snowman_decorate",
-    "snowman_stack",
-}
+local Assets = Assets
+local AddPrefabPostInit = AddPrefabPostInit
+GLOBAL.setfenv(1, GLOBAL)
 
+local snowman_utils = require("snowman_utils")
 local SnowmanDecoratable = require("components/snowmandecoratable")
 
 local MoreDecorations = require("more_decorations")
@@ -33,4 +32,16 @@ for prefab, data in pairs(MoreDecorations) do
         end
         inst:AddComponent("snowmandecor")
     end)
+end
+
+for k, prefab in pairs(snowman_utils.SnowmanPrefabs) do
+    AddPrefabPostInit(prefab, function(inst)
+        inst:AddTag("snowman")
+    end)
+end
+
+local _DECORATESNOWMAN_fn = ACTIONS.DECORATESNOWMAN.fn
+ACTIONS.DECORATESNOWMAN.fn = function(act, ...)
+    local skin_type = act.target and act.target:HasTag("snowmain") and act.target.skin_type or nil
+    return snowman_utils.SpawnSnowmanHook(skin_type, _DECORATESNOWMAN_fn, act, ...)
 end

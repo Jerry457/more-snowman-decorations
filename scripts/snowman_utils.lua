@@ -1,9 +1,10 @@
-local SnowmanDecoratable = require("components/snowmandecoratable")
-
 local SnowmanPrefabs = {
     "snowman",
     "snowball_item",
     "snowman_stack",
+    "snowman_debris_fx",
+    "snowball_rolling_fx",
+    "snowball_shatter_fx",
 }
 
 local SnowmanSkins = {
@@ -15,6 +16,21 @@ local function SetSnowmanSkin(ent, skin_type)
         local skinname = ent.prefab .. "_" ..  skin_type
         TheSim:ReskinEntity(ent.GUID, skinname, skinname)
     end
+end
+
+local function SpawnSnowmanHook(skin_type, fn, ...)
+    local _SpawnPrefab = SpawnPrefab
+    function SpawnPrefab(name)
+        local inst = _SpawnPrefab(name)
+        if inst:HasTag("snowman") then
+            SetSnowmanSkin(inst, skin_type)
+        end
+        return inst
+    end
+
+    local ret = {fn(...)}
+    SpawnPrefab = _SpawnPrefab
+    return unpack(ret)
 end
 
 local function GetEventCallbacks(inst, event, source, source_file, test_fn)
@@ -41,5 +57,6 @@ return {
     SnowmanPrefabs = SnowmanPrefabs,
     SnowmanSkins = SnowmanSkins,
     SetSnowmanSkin = SetSnowmanSkin,
+    SpawnSnowmanHook = SpawnSnowmanHook,
     GetEventCallbacks = GetEventCallbacks,
 }

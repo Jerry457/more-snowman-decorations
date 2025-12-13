@@ -3,9 +3,12 @@ local GetModConfigData = GetModConfigData
 GLOBAL.setfenv(1, GLOBAL)
 
 local snowman_utils = require("snowman_utils")
-local SnowmanSkins = snowman_utils.SnowmanSkins
+local SetSnowmanSkin = snowman_utils.SetSnowmanSkin
 local GetEventCallbacks = snowman_utils.GetEventCallbacks
 local SnowmanDecoratable = require("components/snowmandecoratable")
+
+local STACK_IDS = SnowmanDecoratable.STACK_IDS
+local STACK_DATA = SnowmanDecoratable.STACK_DATA
 
 if GetModConfigData("ModifySnowmanDecorateLimit") then
     TUNING.SNOWMAN_MAX_DECOR = { 9999, 9999, 9999 }
@@ -40,10 +43,55 @@ function SnowmanDecoratable:GetStackSkins()
     return self.stackskins
 end
 
+function SnowmanDecoratable:Unstack(isdestroyed)
+    if not self.ismastersim then
+        return
+    end
+    local x, y, z = self.inst.Transform:GetWorldPosition()
+    local pt = self.inst:GetPosition()
+    for i, v in ipairs(self.stacks:value()) do
+        local skin_type = self.stackskins[i]
+        if v == STACK_IDS.small then
+            local item = self:DoDropItem("snowball_item", x, z)
+            SetSnowmanSkin(item, skin_type)
+        else
+            local stackdata = STACK_DATA[v]
+            if stackdata then
+                if isdestroyed then
+                    local snowman = SpawnPrefab("snowman")
+                    SetSnowmanSkin(snowman, skin_type)
+                    snowman:SetSize(stackdata.name)
+                    snowman.Transform:SetPosition(x, 0, z)
+                    snowman.components.workable:Destroy(self.inst)
+                else
+                    local item = self:DoDropItem("snowman", x, z, stackdata.name)
+                    SetSnowmanSkin(item, skin_type)
+                end
+            end
+        end
+    end
+    if self.basesize:value() == STACK_IDS.small then
+        local item = self:DoDropItem("snowball_item", x, z)
+        SetSnowmanSkin(item, self.inst.skin_type)
+        self.inst:Remove()
+    else
+        local empty = {}
+        self.stacks:set(empty)
+        self.stackoffsets:set(empty)
+        self:OnStacksChanged("unstack")
+        if self.inst.components.inventoryitem then
+            if self.inst.components.heavyobstaclephysics then
+                self.inst.components.heavyobstaclephysics:ForceDropPhysics()
+            end
+            self.inst.components.inventoryitem:DoDropPhysics(x, 0, z, true, 0.5)
+        end
+    end
+end
+
 local _Stack = SnowmanDecoratable.Stack
 function SnowmanDecoratable:Stack(doer, obj, ...)
-	if not self.ismastersim or not obj.components.snowmandecoratable then
-		return
+    if not self.ismastersim or not obj.components.snowmandecoratable then
+        return
     end
 
     table.insert(self.stackskins, obj.skin_type or "")

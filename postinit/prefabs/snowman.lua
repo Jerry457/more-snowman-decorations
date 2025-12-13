@@ -1,14 +1,19 @@
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
-local SetSnowmanSkin = require("snowman_utils").SetSnowmanSkin
+local snowman_utils = require("snowman_utils")
 local SnowmanDecoratable = require("components/snowmandecoratable")
+
+local SetSnowmanSkin = snowman_utils.SetSnowmanSkin
+local SpawnSnowmanHook = snowman_utils.SpawnSnowmanHook
 
 local CheckLiftAndPushable
 local CheckWaxable
 local RefreshPhysicsSize
 local TryHitAnim
 local CreateStack
+
+local _DoBreakApart
 
 local function OnStacksChanged(inst, stacks, stackoffsets, reason)
     local basesize = inst.components.snowmandecoratable:GetSize()
@@ -31,7 +36,7 @@ local function OnStacksChanged(inst, stacks, stackoffsets, reason)
                     end
                 end
                 local fx = SpawnPrefab("snowman_debris_fx")
-                fx.AnimState:SetBuild(stackskins[#stackskins])
+                SetSnowmanSkin(fx, stackskins[#stackskins])
                 fx.AnimState:PlayAnimation("debris_" .. laststackdata.name)
                 fx.Follower:FollowSymbol(inst.GUID, "snowman_ball", offset, -height, 0)
             end
@@ -99,11 +104,28 @@ end
 
 AddPrefabPostInit("snowman", function(inst)
     local _OnStacksChanged = inst.components.snowmandecoratable.onstackschangedfn
-    CheckLiftAndPushable = GlassicAPI.UpvalueUtil.GetUpvalue(_OnStacksChanged, "CheckLiftAndPushable")
-    CheckWaxable = GlassicAPI.UpvalueUtil.GetUpvalue(_OnStacksChanged, "CheckWaxable")
-    RefreshPhysicsSize = GlassicAPI.UpvalueUtil.GetUpvalue(_OnStacksChanged, "RefreshPhysicsSize")
-    TryHitAnim = GlassicAPI.UpvalueUtil.GetUpvalue(_OnStacksChanged, "TryHitAnim")
-    CreateStack = GlassicAPI.UpvalueUtil.GetUpvalue(_OnStacksChanged, "CreateStack")
+    if not CheckLiftAndPushable then
+        CheckLiftAndPushable = GlassicAPI.UpvalueUtil.GetUpvalue(_OnStacksChanged, "CheckLiftAndPushable")
+        CheckWaxable = GlassicAPI.UpvalueUtil.GetUpvalue(_OnStacksChanged, "CheckWaxable")
+        RefreshPhysicsSize = GlassicAPI.UpvalueUtil.GetUpvalue(_OnStacksChanged, "RefreshPhysicsSize")
+        TryHitAnim = GlassicAPI.UpvalueUtil.GetUpvalue(_OnStacksChanged, "TryHitAnim")
+        CreateStack = GlassicAPI.UpvalueUtil.GetUpvalue(_OnStacksChanged, "CreateStack")
+
+        local _AddPushableComponent = GlassicAPI.UpvalueUtil.GetUpvalue(CheckLiftAndPushable, "_AddPushableComponent")
+
+        local _GrowSnowballSize, i, OnStartPushing = GlassicAPI.UpvalueUtil.GetUpvalue(_AddPushableComponent, "OnStartPushing._GrowSnowballSize")
+        local function GrowSnowballSize(inst, doer, ...)
+            return SpawnSnowmanHook(inst.skin_type, _GrowSnowballSize, inst, doer, ...)
+        end
+        debug.setupvalue(OnStartPushing, i, GrowSnowballSize)
+
+        local _OnStopPushing, i = GlassicAPI.UpvalueUtil.GetUpvalue(_AddPushableComponent, "OnStopPushing")
+        local function OnStopPushing(inst, doer, ...)
+            return SpawnSnowmanHook(inst.skin_type, _OnStopPushing, inst, doer, ...)
+        end
+        debug.setupvalue(_AddPushableComponent, i, OnStopPushing)
+    end
+
     inst.components.snowmandecoratable.onstackschangedfn = OnStacksChanged
 
     if not TheWorld.ismastersim then
@@ -112,4 +134,20 @@ AddPrefabPostInit("snowman", function(inst)
 
     inst.components.equippable:SetOnEquip(OnEquip)
 	inst.components.equippable:SetOnUnequip(OnUnequip)
+
+    if not _DoBreakApart then
+        local OnWork = inst.components.workable.onwork
+        local _, i = GlassicAPI.UpvalueUtil.GetUpvalue(OnWork, "DoBreakApart")
+        _DoBreakApart = _
+        local function DoBreakApart(inst, ...)
+            return SpawnSnowmanHook(inst.skin_type, _DoBreakApart, inst, ...)
+        end
+        debug.setupvalue(OnWork, i, DoBreakApart)
+    end
+
+    local _OnLoad = inst.OnLoad
+    local function OnLoad(inst, ...)
+        return SpawnSnowmanHook(inst.skin_type, _OnLoad, inst,...)
+    end
+    inst.OnLoad = OnLoad
 end)
