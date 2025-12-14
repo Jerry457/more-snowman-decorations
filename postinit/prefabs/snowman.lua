@@ -94,12 +94,13 @@ local function OnStacksChanged(inst, stacks, stackoffsets, reason)
 end
 
 local function OnEquip(inst, owner)
-    local skin_build = inst.AnimState:GetSkinBuild() or "snowball"
-    owner.AnimState:OverrideSymbol("swap_body", skin_build, inst.components.symbolswapdata.symbol)
-end
-
-local function OnUnequip(inst, owner)
-    owner.AnimState:ClearOverrideSymbol("swap_body")
+    local skin_build = inst:GetSkinBuild()
+    if skin_build then
+        owner:PushEvent("equipskinneditem", inst:GetSkinName())
+        owner.AnimState:OverrideItemSkinSymbol("swap_body", skin_build, "swap_body", inst.GUID, inst.components.symbolswapdata.symbol)
+    else
+        owner.AnimState:OverrideSymbol("swap_body", "snowball", inst.components.symbolswapdata.symbol)
+    end
 end
 
 AddPrefabPostInit("snowman", function(inst)
@@ -133,7 +134,6 @@ AddPrefabPostInit("snowman", function(inst)
     end
 
     inst.components.equippable:SetOnEquip(OnEquip)
-	inst.components.equippable:SetOnUnequip(OnUnequip)
 
     if not _DoBreakApart then
         local OnWork = inst.components.workable.onwork
