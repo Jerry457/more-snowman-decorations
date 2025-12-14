@@ -1,11 +1,18 @@
-local SnowmanPrefabs = {
-    "snowman",
+local SnowmanItems = {
     "snowball_item",
+}
+
+local SnowmanPrefabs = ConcatArrays({
     "snowman_stack",
     "snowman_debris_fx",
     "snowball_rolling_fx",
     "snowball_shatter_fx",
-}
+    "snowman",
+}, SnowmanItems)
+
+if IsInFrontEnd() then
+    SnowmanPrefabs = SnowmanItems
+end
 
 local SnowmanSkins = {
     "dungball",
@@ -54,6 +61,7 @@ end
 
 
 return {
+    SnowmanItems = SnowmanItems,
     SnowmanPrefabs = SnowmanPrefabs,
     SnowmanSkins = SnowmanSkins,
     SetSnowmanSkin = SetSnowmanSkin,

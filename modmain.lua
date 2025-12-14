@@ -8,6 +8,8 @@ Assets = {
     Asset("ANIM", "anim/item_rotate.zip"),
 }
 
+GlassicAPI.RegisterItemAtlas("snowball_inventoryimages", Assets)
+
 local Assets = Assets
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
