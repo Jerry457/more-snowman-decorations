@@ -22,8 +22,13 @@ AddPrefabPostInit("snowball_item", function(inst)
 
     inst.components.equippable:SetOnEquip(OnEquip)
 
+    local _OnHit = inst.components.projectile.onhit
+    inst.components.projectile.onhit = function(inst, ...)
+        return SpawnSnowmanHook(inst.skin_type, _OnHit, inst, ...)
+    end
+
 	local OnStartPushing = inst.components.pushable.onstartpushingfn
-    inst.components.pushable.onstartpushingfn = function(...)
-        SpawnSnowmanHook(inst.skin_type, OnStartPushing, ...)
+    inst.components.pushable.onstartpushingfn = function(inst, ...)
+        return SpawnSnowmanHook(inst.skin_type, OnStartPushing, inst, ...)
     end
 end)

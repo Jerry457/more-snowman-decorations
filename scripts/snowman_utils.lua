@@ -8,6 +8,7 @@ local SnowmanPrefabs = ConcatArrays({
     "snowball_rolling_fx",
     "snowball_shatter_fx",
     "snowman",
+    "splash_snow_fx",
 }, SnowmanItems)
 
 if IsInFrontEnd() then
