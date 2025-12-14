@@ -1,3 +1,13 @@
+local function AttachParent(inst, parent)
+    inst.entity:SetParent(parent.entity)
+
+    -- inst.components.highlightchild:SetOwner(parent)
+    if parent.components.colouradder ~= nil then
+        parent.components.colouradder:AttachChild(inst)
+    end
+
+    return inst
+end
 
 local function fn()
     local inst = CreateEntity()
@@ -14,6 +24,10 @@ local function fn()
     inst.AnimState:SetBank("snowball")
     inst.AnimState:SetBuild("snowball")
 
+    inst:AddComponent("highlightchild")
+
+    inst:SetPrefabNameOverride("snowman")
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -21,6 +35,10 @@ local function fn()
     end
 
     inst:AddComponent("inspectable")
+
+    inst:AddComponent("colouradder")
+
+    inst.AttachParent = AttachParent
 
     return inst
 end

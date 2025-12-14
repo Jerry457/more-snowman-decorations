@@ -183,10 +183,20 @@ function SnowmanDecoratable.SnowmanDecorateCommon(inst, itemdata, flip, rot)
     end
 end
 
-local _CreateDecor, i, _DoDecor = GlassicAPI.UpvalueUtil.GetUpvalue(SnowmanDecoratable.ApplyDecor, "_DoDecor.CreateDecor")
+local _ApplyDecor = SnowmanDecoratable.ApplyDecor
+local _CreateDecor, i, _DoDecor = GlassicAPI.UpvalueUtil.GetUpvalue(_ApplyDecor, "_DoDecor.CreateDecor")
 local function CreateDecor(itemdata, rot, flip, ...)
     local inst = SpawnPrefab("snowman_decorate")
     SnowmanDecoratable.SnowmanDecorateCommon(inst, itemdata, flip, rot)
     return inst
 end
 debug.setupvalue(_DoDecor, i, CreateDecor)
+
+SnowmanDecoratable.ApplyDecor = function(decordata, decors, basesize, stacks, stackoffsets, owner, ...)
+    _ApplyDecor(decordata, decors, basesize, stacks, stackoffsets, owner, ...)
+    for i, decor in ipairs(decors) do
+        decor:AttachHighLightParent(owner)
+    end
+    owner.highlightchildren = {}
+end
+GlassicAPI.UpvalueUtil.SetUpvalue(SnowmanDecoratable.DoRefreshDecorData, "ApplyDecor", SnowmanDecoratable.ApplyDecor)

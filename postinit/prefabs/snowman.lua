@@ -66,14 +66,15 @@ local function OnStacksChanged(inst, stacks, stackoffsets, reason)
                         ent = SpawnPrefab("snowman_stack")
                         ent:ListenForEvent("onskinschanged", function()
                             stackskins[i] = ent.skin_type or ""
+                            inst.components.snowmandecoratable:SetStackSkins(stackskins)
                         end)
                         local userid = nil
                         SetSnowmanSkin(ent, stackskins[i])
-                        ent.entity:SetParent(inst.entity)
+                        ent:AttachParent(inst)
                         local offset = SnowmanDecoratable.CalculateStackOffset(stackdata.r, stackoffsets[i])
                         ent.Follower:FollowSymbol(inst.GUID, "snowman_ball", offset, -height, 0, true)
                         inst.stacks[n] = ent
-                        table.insert(inst.highlightchildren, ent)
+                        -- table.insert(inst.highlightchildren, ent)
                     end
                     ent.AnimState:PlayAnimation((v > laststackid and "stack_clean_" or "stack_") .. stackdata.name)
 
@@ -84,7 +85,7 @@ local function OnStacksChanged(inst, stacks, stackoffsets, reason)
             end
             for i = n, #inst.stacks do
                 local v = inst.stacks[i]
-                table.removearrayvalue(inst.highlightchildren, v)
+                -- table.removearrayvalue(inst.highlightchildren, v)
                 v:Remove()
                 inst.stacks[i] = nil
             end

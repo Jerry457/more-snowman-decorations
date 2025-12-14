@@ -56,7 +56,7 @@ function SnowmanDecoratingScreen:OnStacksChange(target)
     local stackskins = target.components.snowmandecoratable:GetStackSkins()
     for i, snowball in ipairs(self.stacks) do
         local build = target.AnimState:GetBuild()
-        if i > 1 then
+        if i > 1 and stackskins[i - 1] and stackskins[i - 1] ~= "" then
             build = target.default_build .. "_" .. stackskins[i - 1]
         end
         snowball:GetAnimState():SetBuild(build)
