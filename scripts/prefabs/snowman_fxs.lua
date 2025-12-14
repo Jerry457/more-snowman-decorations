@@ -53,7 +53,9 @@ local function MakeFx(data)
 
         inst.persists = false
 
-        inst:DoTaskInTime(data.sounddelay or 0, PlaySound, data.sound)
+        if data.sound then
+            inst:DoTaskInTime(data.sounddelay or 0, PlaySound, data.sound)
+        end
 
         inst:ListenForEvent("animover", inst.Remove)
 
