@@ -97,7 +97,7 @@ local function OnEquip(inst, owner)
     local skin_build = inst:GetSkinBuild()
     if skin_build then
         owner:PushEvent("equipskinneditem", inst:GetSkinName())
-        owner.AnimState:OverrideItemSkinSymbol("swap_body", skin_build, "swap_body", inst.GUID, inst.components.symbolswapdata.symbol)
+        owner.AnimState:OverrideItemSkinSymbol("swap_body", skin_build, inst.components.symbolswapdata.symbol, inst.GUID, "snowball")
     else
         owner.AnimState:OverrideSymbol("swap_body", "snowball", inst.components.symbolswapdata.symbol)
     end
