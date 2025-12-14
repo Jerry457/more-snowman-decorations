@@ -1,8 +1,14 @@
+GLOBAL.SnowmanConfig = {
+    WaxedSnowmanCanStack = GetModConfigData("WaxedSnowmanCanStack"),
+    UnlimitSnowmanDecorate = GetModConfigData("UnlimitSnowmanDecorate"),
+    SnowmanStackHeight = GetModConfigData("SnowmanStackHeight") or 6,
+}
 
 modimport("main/glassic_api_loader.lua")
 modimport("main/prefab_skins.lua")
 modimport("main/postinit.lua")
 modimport("main/prefab_files.lua")
+modimport("main/actions.lua")
 
 Assets = {
     Asset("ANIM", "anim/item_rotate.zip"),
@@ -12,6 +18,7 @@ GlassicAPI.RegisterItemAtlas("snowball_inventoryimages", Assets)
 
 local Assets = Assets
 local AddPrefabPostInit = AddPrefabPostInit
+local GetModConfigData = GetModConfigData
 GLOBAL.setfenv(1, GLOBAL)
 
 local snowman_utils = require("snowman_utils")
@@ -41,10 +48,4 @@ for k, prefab in pairs(snowman_utils.SnowmanPrefabs) do
         inst:AddTag("snowman")
         inst.default_build = "snowball"
     end)
-end
-
-local _DECORATESNOWMAN_fn = ACTIONS.DECORATESNOWMAN.fn
-ACTIONS.DECORATESNOWMAN.fn = function(act, ...)
-    local skin_type = act.target and act.target:HasTag("snowmain") and act.target.skin_type or nil
-    return snowman_utils.SpawnSnowmanHook(skin_type, _DECORATESNOWMAN_fn, act, ...)
 end

@@ -9,6 +9,20 @@ local function AttachParent(inst, parent)
     return inst
 end
 
+local function DisplayNameFn(inst)
+    local parent = inst.entity:GetParent()
+    if parent then
+        return parent:GetDisplayName()
+    end
+end
+
+local function GetDescription(self, viewer, ...)
+    local parent = self.inst.entity:GetParent()
+    if parent and parent.components.inspectable then
+        return parent.components.inspectable:GetDescription(viewer, ...)
+    end
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -26,7 +40,9 @@ local function fn()
 
     inst:AddComponent("highlightchild")
 
-    inst:SetPrefabNameOverride("snowman")
+    inst.displaynamefn = DisplayNameFn
+
+    inst:AddComponent("fakesnowmandecoratable")
 
     inst.entity:SetPristine()
 
@@ -35,6 +51,7 @@ local function fn()
     end
 
     inst:AddComponent("inspectable")
+    inst.components.inspectable.GetDescription = GetDescription
 
     inst:AddComponent("colouradder")
 

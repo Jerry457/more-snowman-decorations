@@ -41,6 +41,20 @@ local function SpawnSnowmanHook(skin_type, fn, ...)
     return unpack(ret)
 end
 
+local function WaxedSnowmanCanStackHook(inst, fn, ...)
+    local _HasTag = inst.HasTag
+    inst.HasTag = function(inst, tag, ...)
+        if SnowmanConfig.WaxedSnowmanCanStack and (tag == "waxedplant") then
+            return false
+        end
+        return _HasTag(inst, tag, ...)
+    end
+    local ret = {fn(...)}
+    inst.HasTag = _HasTag
+    return unpack(ret)
+end
+
+
 local function GetEventCallbacks(inst, event, source, source_file, test_fn)
     source = source or inst
 
@@ -67,5 +81,6 @@ return {
     SnowmanSkins = SnowmanSkins,
     SetSnowmanSkin = SetSnowmanSkin,
     SpawnSnowmanHook = SpawnSnowmanHook,
+    WaxedSnowmanCanStackHook = WaxedSnowmanCanStackHook,
     GetEventCallbacks = GetEventCallbacks,
 }

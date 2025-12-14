@@ -5,18 +5,18 @@ GLOBAL.setfenv(1, GLOBAL)
 local snowman_utils = require("snowman_utils")
 local SetSnowmanSkin = snowman_utils.SetSnowmanSkin
 local GetEventCallbacks = snowman_utils.GetEventCallbacks
+local WaxedSnowmanCanStackHook = snowman_utils.WaxedSnowmanCanStackHook
 local SnowmanDecoratable = require("components/snowmandecoratable")
 
 local STACK_IDS = SnowmanDecoratable.STACK_IDS
 local STACK_DATA = SnowmanDecoratable.STACK_DATA
 
-if GetModConfigData("ModifySnowmanDecorateLimit") then
+if SnowmanConfig.UnlimitSnowmanDecorate then
     TUNING.SNOWMAN_MAX_DECOR = { 9999, 9999, 9999 }
 end
 
-local ModifySnowmanStackHeight = GetModConfigData("ModifySnowmanStackHeight") or 6
-if ModifySnowmanStackHeight > 6 then
-    GlassicAPI.UpvalueUtil.SetUpvalue(SnowmanDecoratable.CanStack, "MAX_STACK_HEIGHT", ModifySnowmanStackHeight)
+if SnowmanConfig.SnowmanStackHeight > 6 then
+    GlassicAPI.UpvalueUtil.SetUpvalue(SnowmanDecoratable.CanStack, "MAX_STACK_HEIGHT", SnowmanConfig.SnowmanStackHeight)
 end
 
 local function OnSkinsChanged(inst) -- for open snowmandecoratingscreen
@@ -99,6 +99,19 @@ function SnowmanDecoratable:Unstack(isdestroyed)
             self.inst.components.inventoryitem:DoDropPhysics(x, 0, z, true, 0.5)
         end
     end
+end
+
+local _CanStack = SnowmanDecoratable.CanStack
+function SnowmanDecoratable:CanStack(...)
+    return WaxedSnowmanCanStackHook(self.inst, _CanStack, self, ...)
+end
+
+local _EndDecorating = SnowmanDecoratable.EndDecorating
+function SnowmanDecoratable:EndDecorating(...)
+    if SnowmanConfig.WaxedSnowmanCanStack then
+        return
+    end
+    return _EndDecorating(self, ...)
 end
 
 local _Stack = SnowmanDecoratable.Stack

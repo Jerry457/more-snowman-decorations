@@ -144,6 +144,25 @@ AddPrefabPostInit("snowman", function(inst)
             return SpawnSnowmanHook(inst.skin_type, _DoBreakApart, inst, ...)
         end
         debug.setupvalue(OnWork, i, DoBreakApart)
+
+        local _OnWaxed, i, _AddWaxableComponent = GlassicAPI.UpvalueUtil.GetUpvalue(OnWork, "_AddWaxableComponent.OnWaxed")
+        local OnIsWaxing = GlassicAPI.UpvalueUtil.GetUpvalue(_OnWaxed, "OnIsWaxing")
+        local function OnWaxed(inst, ...)
+            _OnWaxed(inst, ...)
+            if TheNet:IsDedicated() then
+                OnIsWaxing(inst)
+            end
+        end
+        debug.setupvalue(_AddWaxableComponent, i, OnWaxed)
+
+        local _OnWaxed4, i, OnWaxed3 = GlassicAPI.UpvalueUtil.GetUpvalue(_OnWaxed, "OnWaxed2.OnWaxed3.OnWaxed4")
+        local function OnWaxed4(inst, ...)
+            _OnWaxed4(inst, ...)
+            if TheNet:IsDedicated() then
+                OnIsWaxing(inst)
+            end
+        end
+        debug.setupvalue(OnWaxed3, i, OnWaxed4)
     end
 
     local _OnLoad = inst.OnLoad
