@@ -12,7 +12,7 @@ modimport("main/prefab_skins.lua")
 modimport("main/postinit.lua")
 modimport("main/prefab_files.lua")
 modimport("main/actions.lua")
-modimport("main/rpc_handler.lua")
+modimport("main/rpc.lua")
 
 Assets = {
     Asset("ANIM", "anim/item_rotate.zip"),

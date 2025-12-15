@@ -1,13 +1,13 @@
-if SnowmanConfig.MoreFunSnowball ~= true then
+if not SnowmanConfig.MoreFunSnowball then
     return
 end
 
 GLOBAL.setfenv(1, GLOBAL)
 -- 这个写的不好，获取鼠标位置应该考虑写在其他地方
 
-local old_OnUpdate = TheInput.OnUpdate
+local _OnUpdate = TheInput.OnUpdate
 function TheInput:OnUpdate()
-    old_OnUpdate(self)
+    _OnUpdate(self)
 
     if ThePlayer == nil or ThePlayer.components.playercontroller == nil then
         return

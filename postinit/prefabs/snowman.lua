@@ -121,6 +121,16 @@ AddPrefabPostInit("snowman", function(inst)
         end
         debug.setupvalue(OnStartPushing, i, GrowSnowballSize)
 
+        if SnowmanConfig.MoreFunSnowball then
+            local _SnowballTooBigWarning, i = GlassicAPI.UpvalueUtil.GetUpvalue(_GrowSnowballSize, "_SnowballTooBigWarning")
+            local function SnowballTooBigWarning(inst, doer)
+                if doer and doer.components.talker and doer:IsValid() then
+                    doer.components.talker:Say(GetString(doer, "ANNOUNCE_BIG_SNOWBALL_IS_COMMING"))
+                end
+            end
+            debug.setupvalue(_GrowSnowballSize, i, SnowballTooBigWarning)
+        end
+
         local _OnStopPushing, i = GlassicAPI.UpvalueUtil.GetUpvalue(_AddPushableComponent, "OnStopPushing")
         local function OnStopPushing(inst, doer, ...)
             return SpawnSnowmanHook(inst.skin_type, _OnStopPushing, inst, doer, ...)

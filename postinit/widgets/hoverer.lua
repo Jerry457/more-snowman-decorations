@@ -1,4 +1,4 @@
-if SnowmanConfig.MoreFunSnowball ~= true then
+if not SnowmanConfig.MoreFunSnowball then
     return
 end
 
