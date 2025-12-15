@@ -15,8 +15,10 @@ modimport("main/rpc_handler.lua")
 
 Assets = {
     Asset("ANIM", "anim/item_rotate.zip"),
+    Asset("ANIM", "anim/snowball.zip"),
 }
 
+GLOBAL.resolvefilepath("anim/snowball.zip")
 GlassicAPI.RegisterItemAtlas("snowball_inventoryimages", Assets)
 
 local Assets = Assets
