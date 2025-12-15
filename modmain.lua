@@ -11,10 +11,7 @@ modimport("main/prefab_skins.lua")
 modimport("main/postinit.lua")
 modimport("main/prefab_files.lua")
 modimport("main/actions.lua")
-
-if SnowmanConfig.MoreFunSnowball then
-    modimport("MoreFunSnowball/modmain.lua")
-end
+modimport("main/rpc_handler.lua")
 
 Assets = {
     Asset("ANIM", "anim/item_rotate.zip"),
