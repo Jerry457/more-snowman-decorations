@@ -15,10 +15,6 @@ if IsInFrontEnd() then
     SnowmanPrefabs = SnowmanItems
 end
 
-local SnowmanSkins = {
-    "dungball",
-}
-
 local function SetSnowmanSkin(ent, skin_type)
     if skin_type and skin_type ~= "" then
         local skinname = ent.prefab .. "_" ..  skin_type
@@ -78,7 +74,6 @@ end
 return {
     SnowmanItems = SnowmanItems,
     SnowmanPrefabs = SnowmanPrefabs,
-    SnowmanSkins = SnowmanSkins,
     SetSnowmanSkin = SetSnowmanSkin,
     SpawnSnowmanHook = SpawnSnowmanHook,
     WaxedSnowmanCanStackHook = WaxedSnowmanCanStackHook,

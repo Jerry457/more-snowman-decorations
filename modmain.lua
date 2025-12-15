@@ -30,7 +30,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local snowman_utils = require("snowman_utils")
 local SnowmanDecoratable = require("components/snowmandecoratable")
 
-local MoreDecorations = require("more_decorations")
+local MoreDecorations = require("snowman_defs").MoreDecorations
 local ITEM_DATA = GlassicAPI.UpvalueUtil.GetUpvalue(SnowmanDecoratable.GetItemData, "ITEM_DATA")
 for prefab, data in pairs(MoreDecorations) do
     ITEM_DATA[hash(prefab)] = data

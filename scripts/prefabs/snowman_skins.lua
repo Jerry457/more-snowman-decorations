@@ -1,8 +1,7 @@
 local prefabs = {}
 
-local snowman_utils = require("snowman_utils")
-local SnowmanPrefabs = snowman_utils.SnowmanPrefabs
-local SnowmanSkins = snowman_utils.SnowmanSkins
+local SnowmanSkins = require("snowman_defs").SnowmanSkins
+local SnowmanPrefabs = require("snowman_utils").SnowmanPrefabs
 
 for _, snow_prefab in ipairs(SnowmanPrefabs) do
     for i, skin_type in ipairs(SnowmanSkins) do

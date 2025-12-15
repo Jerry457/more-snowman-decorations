@@ -1,8 +1,7 @@
 GLOBAL.setfenv(1, GLOBAL)
 
-local snowman_utils = require("snowman_utils")
-local SnowmanPrefabs = snowman_utils.SnowmanPrefabs
-local SnowmanSkins = snowman_utils.SnowmanSkins
+local SnowmanPrefabs = require("snowman_utils").SnowmanPrefabs
+local SnowmanSkins = require("snowman_defs").SnowmanSkins
 
 local skins = {}
 

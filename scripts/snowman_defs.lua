@@ -1,3 +1,7 @@
+local SnowmanSkins = {
+    "dungball",
+}
+
 local MoreDecorations = {
     watermelon = { canflip = true },
     watermelon_cooked = { canflip = true },
@@ -125,4 +129,7 @@ for i, colour in ipairs(winter_ornament_light_colours) do
     }
 end
 
-return MoreDecorations
+return {
+    MoreDecorations,
+    SnowmanSkins
+}
