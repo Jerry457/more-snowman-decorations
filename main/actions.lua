@@ -31,7 +31,7 @@ ACTIONS.DECORATESNOWMAN.fn = function(act, ...)
         end
     end
 
-    local skin_type = act.target and act.target:HasTag("snowmain") and act.target.skin_type or nil
+    local skin_type = act.target and act.target:HasTag("snowman") and act.target.skin_type or nil
     return snowman_utils.SpawnSnowmanHook(skin_type, _DECORATESNOWMAN_fn, act, ...)
 end
 
