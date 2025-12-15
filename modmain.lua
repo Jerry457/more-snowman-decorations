@@ -7,7 +7,7 @@ SnowmanConfig = {
 GLOBAL.SnowmanConfig = SnowmanConfig
 
 modimport("main/glassic_api_loader.lua")
-modimport("main/string.lua")
+modimport("main/strings.lua")
 modimport("main/prefab_skins.lua")
 modimport("main/postinit.lua")
 modimport("main/prefab_files.lua")
