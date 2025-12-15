@@ -5,10 +5,10 @@ end
 
 -- This information tells other players more about the mod
 version = "1.0.0" -- mod版本 上传mod需要两次的版本不一样
-name = en_zh("More snowman decorations", "更多雪人装饰物")  ---mod名字
+name = en_zh("Ultra Deluxe Snowball Overhaul", "超级豪华魔改版雪球")  ---mod名字
 description = en_zh("V".. version ..
- "\n󰀏This MOD adds more decorations to the snowman, and new items will continue to be added in the future.\n󰀌And consider increasing the flexibility of the decorations.\n󰀅Stay tuned.",
- "V" ..version.. "\n󰀏这个MOD为雪人添加了更多装饰物，并且后续仍会继续添加新物品。\n󰀌并且考虑增加装饰物的灵活度，敬请期待。"
+ "\n󰀔This mod completely revamps winter snowballs! \n󰀒Now you can decorate them with various in-game items, change their skins, and create your own unique snowball art. \n󰀐Build towering snowball structures or launch them at friends for chaotic fun—winter just got a lot more exciting!",
+ "V" ..version.. "\n󰀔这个MOD对冬季的雪球进行了全面升级！\n󰀒现在，你可以用游戏中的各种物品自由装饰雪球，还能更换不同的皮肤，打造独一无二的雪球艺术。\n󰀐无论是堆叠成高塔，还是用来撞击朋友，都能让你的冬季冒险更加有趣！"
 )  --mod描述
 author = en_zh("Guto、jerry457","Guto、jerry457") --作者
 
