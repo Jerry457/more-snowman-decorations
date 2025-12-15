@@ -1,18 +1,31 @@
-GLOBAL.setmetatable(env,{__index=function(t,k) return GLOBAL.rawget(GLOBAL,k) end})
+GLOBAL.SnowmanConfig = {
+    WaxedSnowmanCanStack = GetModConfigData("WaxedSnowmanCanStack"),
+    UnlimitSnowmanDecorate = GetModConfigData("UnlimitSnowmanDecorate"),
+    SnowmanStackHeight = GetModConfigData("SnowmanStackHeight") or 6,
+}
+
+modimport("main/glassic_api_loader.lua")
+modimport("main/prefab_skins.lua")
+modimport("main/postinit.lua")
+modimport("main/prefab_files.lua")
+modimport("main/actions.lua")
 
 Assets = {
     Asset("ANIM", "anim/item_rotate.zip"),
 }
 
-PrefabFiles = {
-    "snowman_decorate",
-}
+GlassicAPI.RegisterItemAtlas("snowball_inventoryimages", Assets)
 
-local UpvalueUtil = require("upvalueutil")
+local Assets = Assets
+local AddPrefabPostInit = AddPrefabPostInit
+local GetModConfigData = GetModConfigData
+GLOBAL.setfenv(1, GLOBAL)
+
+local snowman_utils = require("snowman_utils")
 local SnowmanDecoratable = require("components/snowmandecoratable")
 
 local MoreDecorations = require("more_decorations")
-local ITEM_DATA = UpvalueUtil.GetUpvalue(SnowmanDecoratable.GetItemData, "ITEM_DATA")
+local ITEM_DATA = GlassicAPI.UpvalueUtil.GetUpvalue(SnowmanDecoratable.GetItemData, "ITEM_DATA")
 for prefab, data in pairs(MoreDecorations) do
     ITEM_DATA[hash(prefab)] = data
     data.name = prefab
@@ -30,212 +43,9 @@ for prefab, data in pairs(MoreDecorations) do
     end)
 end
 
-local function GetEventCallbacks(inst, event, source, source_file, test_fn)
-    source = source or inst
-
-    if not inst.event_listening[event] or not inst.event_listening[event][source] then
-        return
-    end
-
-    for _, fn in ipairs(inst.event_listening[event][source]) do
-        if source_file then
-            local info = debug.getinfo(fn, "S")
-            if info and (info.source == source_file) and (not test_fn or test_fn(fn)) then
-                return fn
-            end
-        elseif (not test_fn or test_fn(fn)) then
-            return fn
-        end
-    end
-end
-
-AddComponentPostInit("snowmandecoratable", function(self, inst)
-    self.decors = {}
-
-    if not self.ismastersim then
-        local OnDecorDataDirty_Client = GetEventCallbacks(inst, "decordatadirty")
-        inst:RemoveEventCallback("decordatadirty", OnDecorDataDirty_Client)
-    else
-        inst:ListenForEvent("decordatadirty", function()
-            inst.components.snowmandecoratable:DoRefreshDecorData()
-        end)
-    end
-end)
-
-local function UseCustomAnimation(inst, itemdata, flip, rot)
-    if itemdata.light then
-        if not inst.Light then
-            inst.entity:AddLight()
-        end
-        if itemdata.light.falloff ~= nil then
-            inst.Light:SetFalloff(itemdata.light.falloff)
-        end
-        if itemdata.light.intensity ~= nil then
-            inst.Light:SetIntensity(itemdata.light.intensity)
-        end
-        if itemdata.light.radius ~= nil then
-            inst.Light:SetRadius(itemdata.light.radius)
-        end
-        if itemdata.light.radius ~= nil then
-            inst.Light:SetRadius(itemdata.light.radius)
-        end
-        if itemdata.light.colour ~= nil then
-            inst.Light:SetColour((itemdata.light.colour / 255):Get())
-        end
-
-        inst.Light:Enable(true)
-    end
-
-    inst.AnimState:SetBank(itemdata.bank)
-    inst.AnimState:SetBuild(itemdata.build)
-
-    if itemdata.mult_colour then
-        inst.AnimState:SetMultColour(unpack(itemdata.mult_colour))
-    end
-    if itemdata.use_point_filtering then
-        inst.AnimState:UsePointFiltering(true)
-    end
-    if itemdata.bloome_ffect then
-        inst.AnimState:SetBloomEffectHandle(itemdata.bloome_ffect)
-    end
-
-    local animation = itemdata.anim..(flip and itemdata.canflip and "_flip" or "")
-    if itemdata.custom_animation_num_rots then
-        animation = animation .. "_" .. (rot - 1)
-        inst.AnimState:Resume()
-        inst.AnimState:PlayAnimation(animation, true)
-    else
-        inst.AnimState:PlayAnimation(animation)
-        inst.AnimState:SetFrame(rot - 1)
-        inst.AnimState:Pause()
-    end
-
-    if itemdata.fn then
-        itemdata.fn(inst, itemdata)
-    end
-end
-
-local _CreateDecor, i, _DoDecor = UpvalueUtil.GetUpvalue(SnowmanDecoratable.ApplyDecor, "_DoDecor.CreateDecor")
-local function CreateDecor(itemdata, rot, flip, ...)
-    local inst = SpawnPrefab("snowman_decorate")
-    UseCustomAnimation(inst, itemdata, flip, rot)
-    return inst
-end
-debug.setupvalue(_DoDecor, i, CreateDecor)
-
-if GetModConfigData("ModifySnowmanDecorateLimit") then
-    TUNING.SNOWMAN_MAX_DECOR = { 9999, 9999, 9999 }
-end
-
-local ModifySnowmanStackHeight = GetModConfigData("ModifySnowmanStackHeight") or 6
-if ModifySnowmanStackHeight > 6 then
-    UpvalueUtil.SetUpvalue(SnowmanDecoratable.CanStack, "MAX_STACK_HEIGHT", ModifySnowmanStackHeight)
-end
-
-----------------------------------------------------------------------------------------------------------------
------------------------------------------[[SnowmanDecoratingScreen]]--------------------------------------------
-----------------------------------------------------------------------------------------------------------------
-local SnowmanDecoratingScreen = require("screens/redux/snowmandecoratingscreen")
-local TrueScrollList = require("widgets/truescrolllist")
-
-local IMG_SCALE = 0.75
-local DISPLAY_MAX_HEIGH = 550
-AddClassPostConstruct("screens/redux/snowmandecoratingscreen", function(self, owner, target, obj)
-    local height = self:GetStackHeight() * IMG_SCALE
-
-    -- if height <= DISPLAY_MAX_HEIGH then
-    --     return
-    -- end
-
-    local root = self.root
-    local snowmanroot = self.snowmanroot
-    root.scrollbar_height = DISPLAY_MAX_HEIGH
-    root.scrollbar_offset = { 300, 20 }
-
-    root.end_pos = 20
-    root.scroll_per_click = 1
-    root.current_scroll_pos = root.end_pos / 2
-
-    TrueScrollList.BuildScrollBar(root)
-    root.GetSlideStart = TrueScrollList.GetSlideStart
-    root.GetSlideRange = TrueScrollList.GetSlideRange
-    root.GetPositionScale = TrueScrollList.GetPositionScale
-    root.DoDragScroll = TrueScrollList.DoDragScroll
-
-    function root:Scroll(scroll_step)
-        self.current_scroll_pos = math.clamp(self.current_scroll_pos + scroll_step, 1, self.end_pos)
-        self:RefreshView()
-    end
-
-    function root:RefreshView()
-        self.position_marker:SetPosition(0, self:GetSlideStart() - self:GetPositionScale() * self:GetSlideRange())
-        snowmanroot:SetPosition(0, -height + height * self:GetPositionScale())
-        -- snowmanroot:SetPosition(0, -height + DISPLAY_MAX_HEIGH / 2 + (height - DISPLAY_MAX_HEIGH) * self:GetPositionScale())
-    end
-
-    root:RefreshView()
-end)
-
-function SnowmanDecoratingScreen:GetStackHeight()
-    local height = 0
-    for i, snowball in ipairs(self.stacks) do
-        height = snowball.ypos
-        if snowball.stackdata then
-            height = height + snowball.stackdata.heights[1]
-        end
-    end
-    return height
-end
-
-local _StartDraggingItem = SnowmanDecoratingScreen.StartDraggingItem
-function SnowmanDecoratingScreen:StartDraggingItem(obj, ...)
-    _StartDraggingItem(self, obj, ...)
-    UseCustomAnimation(self.dragitem.inst, self.dragitem.itemdata, self.dragitem.flip, self.dragitem.rot)
-end
-
-local _DoAddItemAt = SnowmanDecoratingScreen.DoAddItemAt
-function SnowmanDecoratingScreen:DoAddItemAt(x, y, itemhash, itemdata, rot, flip, ...) --snowball local space
-    local decor = _DoAddItemAt(self, x, y, itemhash, itemdata, rot, flip, ...)
-    UseCustomAnimation(decor.inst, itemdata, flip, rot)
-    return decor
-end
-
-local _CanRotateDraggingItem = SnowmanDecoratingScreen.CanRotateDraggingItem
-function SnowmanDecoratingScreen:CanRotateDraggingItem(...)
-    if self.dragitem and self.dragitem.itemdata.custom_animation_num_rots then
-        return self.dragitem ~= nil and self.dragitem.shown and self.dragitem.itemdata.custom_animation_num_rots > 1
-    end
-    return _CanRotateDraggingItem(self, ...)
-end
-
-local _RotateDraggingItem = SnowmanDecoratingScreen.RotateDraggingItem
-function SnowmanDecoratingScreen:RotateDraggingItem(delta, ...)
-    local itemdata = self.dragitem.itemdata
-    if self.dragitem and itemdata.custom_animation_num_rots then
-        local num_rots = itemdata.custom_animation_num_rots
-        self.dragitem.rot = self.dragitem.rot + delta
-        while self.dragitem.rot > num_rots do
-            self.dragitem.rot = self.dragitem.rot - num_rots
-        end
-        while self.dragitem.rot < 1 do
-            self.dragitem.rot = self.dragitem.rot + num_rots
-        end
-        local animation = itemdata.anim .. (self.dragitem.flip and itemdata.canflip and "_flip_" or "_") .. (self.dragitem.rot - 1)
-        self.dragitem:GetAnimState():PlayAnimation(animation, true)
-    else
-        _RotateDraggingItem(self, delta, ...)
-    end
-end
-
-local _FlipDraggingItem = SnowmanDecoratingScreen.FlipDraggingItem
-function SnowmanDecoratingScreen:FlipDraggingItem(...)
-    local num_rots = self.dragitem.itemdata.custom_animation_num_rots
-    if self.dragitem and num_rots then
-        self.dragitem.flip = not self.dragitem.flip
-        local rot = ((num_rots - self.dragitem.rot + 1) % num_rots) + 1
-        self.dragitem.rot = rot
-        UseCustomAnimation(self.dragitem.inst, self.dragitem.itemdata, self.dragitem.flip, self.dragitem.rot)
-    else
-        _FlipDraggingItem(self, ...)
-    end
+for k, prefab in pairs(snowman_utils.SnowmanPrefabs) do
+    AddPrefabPostInit(prefab, function(inst)
+        inst:AddTag("snowman")
+        inst.default_build = "snowball"
+    end)
 end

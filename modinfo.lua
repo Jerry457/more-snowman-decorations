@@ -62,14 +62,21 @@ end
 
 configuration_options = {
     {
-        name = "ModifySnowmanDecorateLimit",
+        name = "UnlimitSnowmanDecorate",
         label = en_zh("Modify the maximum number of snowman decorations", "修改雪人装饰的最大数量"),
         hover = en_zh("Modify the maximum number of snowman decorations", "修改雪人装饰的最大数量"),
         options = boolean_options,
         default = false,
     },
     {
-        name = "ModifySnowmanStackHeight",
+        name = "WaxedSnowmanCanStack",
+        label = en_zh("Waxed snowman can be stacked and decorated", "可以装饰、堆叠被打蜡的雪人"),
+        hover = en_zh("Waxed snowman can be stacked and decorated", "可以装饰、堆叠被打蜡的雪人"),
+        options = boolean_options,
+        default = true,
+    },
+    {
+        name = "SnowmanStackHeight",
         label = en_zh("Modify the maximum number of snowman stack height", "修改雪人装饰的最大堆叠高度"),
         hover = en_zh("Modify the maximum number of snowman stack height", "修改雪人装饰的最大堆叠高度"),
         options = get_numer_options(6, 31, 1),
