@@ -1,5 +1,6 @@
 local SnowmanSkins = {
     "dungball",
+    "tumbleweed",
 }
 
 local MoreDecorations = {
