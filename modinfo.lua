@@ -85,7 +85,7 @@ configuration_options = {
     {
         name = "MoreFunSnowball",
         label = en_zh("More fun snowball", "更好玩的滚雪球"),
-        hover = en_zh("Can turn corners when rrolling snowball, and can collide other", "滚雪球时可以拐弯，并且可以撞击他人，此功能代码来源于WIGFRID"),
+        hover = en_zh("Can turn corners when rrolling snowball, and can collide other (Code source: WIGFRID)", "滚雪球时可以拐弯，并且可以撞击他人 (此功能代码来源于WIGFRI)"),
         options = boolean_options,
         default = true,
     },
