@@ -130,6 +130,6 @@ for i, colour in ipairs(winter_ornament_light_colours) do
 end
 
 return {
-    MoreDecorations,
-    SnowmanSkins
+    SnowmanSkins = SnowmanSkins,
+    MoreDecorations = MoreDecorations,
 }
