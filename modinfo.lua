@@ -82,4 +82,11 @@ configuration_options = {
         options = get_numer_options(6, 31, 1),
         default = 6,
     },
+    {
+        name = "MoreFunSnowball",
+        label = en_zh("More fun snowball", "更好玩的滚雪球"),
+        hover = en_zh("Can turn corners when rrolling snowball, and can collide other", "滚雪球时可以拐弯，并且可以撞击他人"),
+        options = boolean_options,
+        default = true,
+    },
 }

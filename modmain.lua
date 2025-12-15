@@ -1,14 +1,20 @@
-GLOBAL.SnowmanConfig = {
+SnowmanConfig = {
     WaxedSnowmanCanStack = GetModConfigData("WaxedSnowmanCanStack"),
     UnlimitSnowmanDecorate = GetModConfigData("UnlimitSnowmanDecorate"),
     SnowmanStackHeight = GetModConfigData("SnowmanStackHeight") or 6,
+    MoreFunSnowball = GetModConfigData("MoreFunSnowball"),
 }
+GLOBAL.SnowmanConfig = SnowmanConfig
 
 modimport("main/glassic_api_loader.lua")
 modimport("main/prefab_skins.lua")
 modimport("main/postinit.lua")
 modimport("main/prefab_files.lua")
 modimport("main/actions.lua")
+
+if SnowmanConfig.MoreFunSnowball then
+    modimport("MoreFunSnowball/modmain.lua")
+end
 
 Assets = {
     Asset("ANIM", "anim/item_rotate.zip"),
