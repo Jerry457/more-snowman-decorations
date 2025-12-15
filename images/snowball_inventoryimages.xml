@@ -1,6 +1,7 @@
 <Atlas>
     <Texture filename="snowball_inventoryimages.tex" />
     <Elements>
-        <Element name="snowball_item_dungball.tex" u1="0.0078125" v1="0.0078125" u2="0.9921875" v2="0.9921875" />
+        <Element name="snowball_item_dungball.tex" u1="0.00390625" v1="0.0078125" u2="0.49609375" v2="0.9921875" />
+        <Element name="snowman_dungball.tex" u1="0.50390625" v1="0.0078125" u2="0.99609375" v2="0.9921875" />
     </Elements>
 </Atlas>
