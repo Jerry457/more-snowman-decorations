@@ -106,14 +106,6 @@ function SnowmanDecoratable:CanStack(...)
     return WaxedSnowmanCanStackHook(self.inst, _CanStack, self, ...)
 end
 
-local _EndDecorating = SnowmanDecoratable.EndDecorating
-function SnowmanDecoratable:EndDecorating(...)
-    if SnowmanConfig.WaxedSnowmanCanStack then
-        return
-    end
-    return _EndDecorating(self, ...)
-end
-
 local _Stack = SnowmanDecoratable.Stack
 function SnowmanDecoratable:Stack(doer, obj, ...)
     if not self.ismastersim or not obj.components.snowmandecoratable then
