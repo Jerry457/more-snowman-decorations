@@ -2,6 +2,8 @@ local SnowmanSkins = {
     "dungball",
     "tumbleweed",
     "icecream",
+    "invisible",
+    "meatball",
 }
 
 local MoreDecorations = {

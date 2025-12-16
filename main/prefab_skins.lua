@@ -11,6 +11,7 @@ for _, prefab in ipairs(SnowmanPrefabs) do
     _G[prefab .. "_clear_fn"] = function(inst)
         basic_clear_fn(inst, "snowball")
         inst.skin_type = nil
+        inst.AnimState:SetRayTestOnBB(false)
         inst:PushEvent("onskinschanged")
     end
 

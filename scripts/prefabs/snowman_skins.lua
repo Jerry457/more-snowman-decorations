@@ -15,6 +15,7 @@ for _, snow_prefab in ipairs(SnowmanPrefabs) do
             init_fn = function(inst)
                 GlassicAPI.BasicInitFn(inst)
                 inst.skin_type = skin_type
+                inst.AnimState:SetRayTestOnBB(inst.skin_type == "invisible")
                 inst:PushEvent("onskinschanged")
             end,
             skin_tags = { string.upper(skin_build) },
