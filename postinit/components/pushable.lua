@@ -4,9 +4,6 @@ end
 
 GLOBAL.setfenv(1, GLOBAL)
 
--- 雪球冲击伤害
-TUNING.SNOWBALL_DAMAGE = 30
-
 local NON_COLLAPSIBLE_TAGS = {"stump", "flying", "shadow", "playerghost", "NOCLICK", "INLIMBO"}
 
 local function GetDestByAngle(start_pos, angle, dist)
