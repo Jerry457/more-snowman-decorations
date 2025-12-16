@@ -7,8 +7,8 @@ end
 version = "1.0.1" -- mod版本 上传mod需要两次的版本不一样
 name = en_zh("Ultra Deluxe Snowball Overhaul", "超级豪华魔改版雪球")  ---mod名字
 description = en_zh("V".. version ..
- "\n󰀔This mod completely revamps winter snowballs! \n󰀒Now you can decorate them with various in-game items, change their skins, and create your own unique snowball art. \n󰀐Build towering snowball structures or launch them at friends for chaotic fun—winter just got a lot more exciting!",
- "V" ..version.. "\n󰀔这个MOD对冬季的雪球进行了全面升级！\n󰀒现在，你可以用游戏中的各种物品自由装饰雪球，还能更换不同的皮肤，打造独一无二的雪球艺术。\n󰀐无论是堆叠成高塔，还是用来撞击朋友，都能让你的冬季冒险更加有趣！"
+    "\n󰀔This mod completely revamps winter snowballs! \n󰀒Now you can decorate them with various in-game items, change their skins, and create your own unique snowball art. \n󰀐Build towering snowball structures or launch them at friends for chaotic fun—winter just got a lot more exciting!",
+    "V" ..version.. "\n󰀔这个MOD对冬季的雪球进行了全面升级！\n󰀒现在，你可以用游戏中的各种物品自由装饰雪球，还能更换不同的皮肤，打造独一无二的雪球艺术。\n󰀐无论是堆叠成高塔，还是用来撞击朋友，都能让你的冬季冒险更加有趣！"
 )  --mod描述
 author = en_zh("Guto、jerry457","Guto、jerry457") --作者
 
@@ -63,21 +63,21 @@ end
 configuration_options = {
     {
         name = "UnlimitSnowmanDecorate",
-         label = en_zh("Remove Snowball Decoration Limit", "解除雪球装饰数量限制"),
+        label = en_zh("Remove Snowball Decoration Limit", "解除雪球装饰数量限制"),
         hover = en_zh("Place unlimited decorations on snowballs (bypasses vanilla game restrictions)", "允许在雪球上放置无限数量的装饰（突破原版游戏限制）"),
         options = boolean_options,
         default = true,
     },
     {
         name = "WaxedSnowmanCanStack",
-       label = en_zh("Decorate/Stack Embalmed Snowball", "可以装饰、堆叠被防腐的雪球"),
+        label = en_zh("Decorate/Stack Embalmed Snowball", "可以装饰、堆叠被防腐的雪球"),
         hover = en_zh("Allows decorating and stacking snowmen preserved with Embalming Spritz", "雪球被使用了防腐喷雾后，它将不会在冬季结束后融化，并且你仍然能够装饰或者堆叠它"),
         options = boolean_options,
         default = true,
     },
     {
         name = "SnowmanStackHeight",
-       label = en_zh("Max Snowball Stack Height", "修改堆叠雪球的最大高度"),
+        label = en_zh("Max Snowball Stack Height", "修改堆叠雪球的最大高度"),
         hover = en_zh("Increases the maximum number of snowballs you can stack (beyond vanilla limit)", "堆叠雪球无论大小，都将被限制同一高度"),
         options = get_numer_options(6, 31, 1),
         default = 31,
