@@ -1,4 +1,5 @@
 local SnowmanDecoratable = require("components/snowmandecoratable")
+local SetSnowmanSkin = require("snowman_utils").SetSnowmanSkin
 
 local assets =
 {
@@ -22,55 +23,95 @@ if TheSim then -- Exporter guard.
     scrapbook_adddeps = SnowmanDecoratable.CollectScrapbookDeps()
 end
 
-local PHYSICS_RADIUS =
-{
-    ["small"] = 0.1,
-    ["med"] = 0.3,
-    ["large"] = 0.5,
+local SIZE_DATA = {
+    {
+        size = "small",
+        physics_radius = 0.1,
+        anim_radius = 0.35,
+        num_loot = 1,
+        snow_to_grow = 3,
+    },
+    {
+        size = "med",
+        physics_radius = 0.3,
+        anim_radius = 0.7,
+        num_loot = 3,
+        snow_to_grow = 5,
+    },
+    {
+        size = "large",
+        physics_radius = 0.5,
+        anim_radius = 0.95,
+        num_loot = 5,
+        snow_to_grow = 7,
+    },
+    {
+        size = "giant",
+        physics_radius = 0.7,
+        anim_radius = 1.3,
+        num_loot = 7,
+        snow_to_grow = 9,
+    },
+    {
+        size = "epic",
+        physics_radius = 0.9,
+        anim_radius = 1.8,
+        num_loot = 9,
+    },
 }
 
-local ANIM_RADIUS = --art visual radius
-{
-    ["small"] = 0.35,
-    ["med"] = 0.7,
-    ["large"] = 0.95,
-}
-
-local NUM_LOOT =
-{
-    ["small"] = 1,
-    ["med"] = 3,
-    ["large"] = 5,
-}
-
-local SNOW_TO_GROW =
-{
-    ["small"] = 3,
-    ["med"] = 5,
-}
+local PHYSICS_RADIUS = {}
+local ANIM_RADIUS = {}
+local NUM_LOOT = {}
+local SNOW_TO_GROW = {}
+for i, data in ipairs(SIZE_DATA) do
+    PHYSICS_RADIUS[data.size] = data.physics_radius
+    ANIM_RADIUS[data.size] = data.anim_radius
+    NUM_LOOT[data.size] = data.num_loot
+    SNOW_TO_GROW[data.size] = data.snow_to_grow
+end
 
 local function _GetNextSize(size)
-    return size == "small" and "med" or "large"
+    for i, data in ipairs(SIZE_DATA) do
+        if size == data.size and SIZE_DATA[i + 1] then
+            return SIZE_DATA[i + 1].size
+        end
+    end
+end
+
+local function _GetLastSize(size)
+    for i, data in ipairs(SIZE_DATA) do
+        if size == data.size and SIZE_DATA[i - 1] then
+            return SIZE_DATA[i - 1].size
+        end
+    end
 end
 
 local function _GetGrowAnim(size)
-    return (size == "med" and "small_to_med")
-        or (size == "large" and "med_to_large")
-        or nil
+    local last_size = _GetLastSize(size)
+    if last_size then
+        return last_size .. "_to_" .. size
+    end
 end
 
 local function TryHitAnim(inst)
     if not (inst.components.pushable and inst.components.pushable:IsPushing()) then
         local size = inst.components.snowmandecoratable:GetSize()
-        inst.AnimState:PlayAnimation("hit_"..size)
-        inst.AnimState:PushAnimation("ground_"..size, false)
+        inst.AnimState:PlayAnimation("hit_" .. size)
+        inst.AnimState:PushAnimation("ground_" .. size, false)
         return true
     end
     return false
 end
 
 local function OnEquip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_body", "snowball", inst.components.symbolswapdata.symbol)
+    local skin_build = inst:GetSkinBuild()
+    if skin_build then
+        owner:PushEvent("equipskinneditem", inst:GetSkinName())
+        owner.AnimState:OverrideItemSkinSymbol("swap_body", skin_build, inst.components.symbolswapdata.symbol, inst.GUID, "snowball")
+    else
+        owner.AnimState:OverrideSymbol("swap_body", "snowball", inst.components.symbolswapdata.symbol)
+    end
 end
 
 local function OnUnequip(inst, owner)
@@ -82,6 +123,7 @@ local function OnStopPushing(inst)
     if size == "small" then
         local x, y, z = inst.Transform:GetWorldPosition()
         local snowball = SpawnPrefab("snowball_item")
+        SetSnowmanSkin(snowball, inst.skin_type)
         snowball.Transform:SetPosition(x, 0, z)
         snowball.components.inventoryitem:InheritWorldWetnessAtTarget(inst)
         if inst.snowaccum > 0 then
@@ -111,7 +153,11 @@ end
 
 local function _SnowballTooBigWarning(inst, doer)
     if doer and doer.components.talker and doer:IsValid() then
-        doer.components.talker:Say(GetString(doer, "ANNOUNCE_SNOWBALL_TOO_BIG"))
+        if SnowmanConfig.MoreFunSnowball then
+            doer.components.talker:Say(GetString(doer, "ANNOUNCE_BIG_SNOWBALL_IS_COMMING"))
+        else
+            doer.components.talker:Say(GetString(doer, "ANNOUNCE_SNOWBALL_TOO_BIG"))
+        end
     end
 end
 
@@ -142,7 +188,7 @@ local function _GrowSnowballSize(inst, doer)
         end
 
         local oldsize = inst.components.snowmandecoratable:GetSize()
-        if oldsize == "large" then
+        if oldsize == "epic" then
             inst._pushingtask:Cancel()
             inst._pushingtask = inst:DoPeriodicTask(8, _SnowballTooBigWarning, 0.8, doer)
         else
@@ -157,7 +203,7 @@ local function _GrowSnowballSize(inst, doer)
                     inst:SetSize(newsize, true)
                     inst.snowaccum = 0
                 end
-                if newsize == "large" then
+                if newsize == "epic" then
                     inst._pushingtask:Cancel()
                     inst._pushingtask = inst:DoPeriodicTask(8, _SnowballTooBigWarning, 1.6, doer)
                 end
@@ -165,6 +211,7 @@ local function _GrowSnowballSize(inst, doer)
         end
         if inst._rollingfx == nil then
             inst._rollingfx = SpawnPrefab("snowball_rolling_fx")
+            SetSnowmanSkin(inst._rollingfx, inst.skin_type)
             inst._rollingfx.entity:SetParent(inst.entity)
             inst._rollingfx.AnimState:MakeFacingDirty() -- Not needed for clients
             inst._rollingfx:ListenForEvent("onremove", DetachRollingFx, inst)
@@ -326,9 +373,9 @@ local WAX_DARK_MULTCOLOR = { 0.2, 0.2, 0.2, 1 }
 local function OnWaxed4(inst)
     inst:RemoveComponent("colourtweener")
     inst.iswaxing:set(false)
-    if not TheNet:IsDedicated() then
+    -- if not TheNet:IsDedicated() then
         OnIsWaxing(inst)
-    end
+    -- end
 end
 
 local function OnWaxed3(inst)
@@ -357,9 +404,9 @@ local function OnWaxed(inst, doer, waxitem)
     inst.components.colourtweener:StartTween(WAX_DARK_MULTCOLOR, WAX_FADE_IN_TIME, OnWaxed2)
 
     inst.iswaxing:set(true)
-    if not TheNet:IsDedicated() then
+    -- if not TheNet:IsDedicated() then
         OnIsWaxing(inst)
-    end
+    -- end
     return true
 end
 
@@ -403,6 +450,7 @@ end
 
 local function OnStacksChanged(inst, stacks, stackoffsets, reason)
     local basesize = inst.components.snowmandecoratable:GetSize()
+    local stackskins = inst.components.snowmandecoratable:GetStackSkins()
     if TheWorld.ismastersim then
         CheckLiftAndPushable(inst)
         CheckWaxable(inst)
@@ -421,14 +469,15 @@ local function OnStacksChanged(inst, stacks, stackoffsets, reason)
                     end
                 end
                 local fx = SpawnPrefab("snowman_debris_fx")
-                fx.AnimState:PlayAnimation("debris_"..laststackdata.name)
+                SetSnowmanSkin(fx, stackskins[#stackskins])
+                fx.AnimState:PlayAnimation("debris_" .. laststackdata.name)
                 fx.Follower:FollowSymbol(inst.GUID, "snowman_ball", offset, -height, 0)
             end
             TryHitAnim(inst)
             inst.SoundEmitter:PlaySound("meta5/snowman/place_snow")
         end
-    end
-    if not TheNet:IsDedicated() then
+    -- end
+    -- if not TheNet:IsDedicated() then
         local laststackid = SnowmanDecoratable.STACK_IDS[basesize]
         local laststackdata = SnowmanDecoratable.STACK_DATA[laststackid]
         if laststackdata then
@@ -447,14 +496,20 @@ local function OnStacksChanged(inst, stacks, stackoffsets, reason)
 
                     local ent = inst.stacks[n]
                     if ent == nil then
-                        ent = CreateStack()
-                        ent.entity:SetParent(inst.entity)
+                        ent = SpawnPrefab("snowman_stack")
+                        ent:ListenForEvent("onskinschanged", function()
+                            stackskins[i] = ent.skin_type or ""
+                            inst.components.snowmandecoratable:SetStackSkins(stackskins)
+                        end)
+                        local userid = nil
+                        SetSnowmanSkin(ent, stackskins[i])
+                        ent:AttachParent(inst)
                         local offset = SnowmanDecoratable.CalculateStackOffset(stackdata.r, stackoffsets[i])
                         ent.Follower:FollowSymbol(inst.GUID, "snowman_ball", offset, -height, 0, true)
                         inst.stacks[n] = ent
-                        table.insert(inst.highlightchildren, ent)
+                        -- table.insert(inst.highlightchildren, ent)
                     end
-                    ent.AnimState:PlayAnimation((v > laststackid and "stack_clean_" or "stack_")..stackdata.name)
+                    ent.AnimState:PlayAnimation((v > laststackid and "stack_clean_" or "stack_") .. stackdata.name)
 
                     laststackid = v
                     laststackdata = stackdata
@@ -463,7 +518,7 @@ local function OnStacksChanged(inst, stacks, stackoffsets, reason)
             end
             for i = n, #inst.stacks do
                 local v = inst.stacks[i]
-                table.removearrayvalue(inst.highlightchildren, v)
+                -- table.removearrayvalue(inst.highlightchildren, v)
                 v:Remove()
                 inst.stacks[i] = nil
             end
@@ -505,7 +560,9 @@ end
 
 local function DoBreakApart(inst, isdestroyed)
     local x, y, z = inst.Transform:GetWorldPosition()
-    SpawnPrefab("snowball_shatter_fx").Transform:SetPosition(x, y, z)
+    local fx = SpawnPrefab("snowball_shatter_fx")
+    SetSnowmanSkin(fx, inst.skin_type)
+    fx.Transform:SetPosition(x, y, z)
     if not inst.components.snowmandecoratable:IsMelting() then
         inst:AddComponent("lootdropper")
         local pt = inst:GetPosition()
@@ -583,6 +640,7 @@ local function OnLoad(inst, data)
         --it was saved during rolling, never got bigger
         local x, y, z = inst.Transform:GetWorldPosition()
         local snowball = SpawnPrefab("snowball_item")
+        SetSnowmanSkin(snowball, inst.skin_type)
         snowball.Transform:SetPosition(x, 0, z)
         snowball.components.inventoryitem:InheritWorldWetnessAtTarget(inst)
         inst:RemoveFromScene()

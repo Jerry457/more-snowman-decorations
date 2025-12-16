@@ -8,11 +8,57 @@ local GetEventCallbacks = snowman_utils.GetEventCallbacks
 local WaxedSnowmanCanStackHook = snowman_utils.WaxedSnowmanCanStackHook
 local SnowmanDecoratable = require("components/snowmandecoratable")
 
-local STACK_IDS = SnowmanDecoratable.STACK_IDS
 local STACK_DATA = SnowmanDecoratable.STACK_DATA
+local STACK_IDS = SnowmanDecoratable.STACK_IDS
 
-if SnowmanConfig.UnlimitSnowmanDecorate then
-    TUNING.SNOWMAN_MAX_DECOR = { 9999, 9999, 9999 }
+STACK_DATA[1].heights.giant = 224
+STACK_DATA[1].heights.epic = 224
+
+STACK_DATA[2].heights.giant = 224
+STACK_DATA[2].heights.epic = 224
+
+STACK_DATA[3].heights.giant = 224
+STACK_DATA[3].heights.epic = 224
+
+STACK_DATA[4] = {
+    name = "giant",
+    heights =
+    {
+        small = 256,
+        med = 234,
+        large = 224,
+        giant = 224,
+        epic = 123,
+    },
+    r = 145,
+    ycenter = 124,
+    yscale = 0.986,
+    stackheight = 5,
+}
+
+STACK_DATA[5] = {
+    name = "epic",
+    heights =
+    {
+        small = 256,
+        med = 234,
+        large = 224,
+        giant = 224,
+        epic = 123,
+    },
+    r = 145,
+    ycenter = 124,
+    yscale = 0.986,
+    stackheight = 7,
+}
+
+for i, v in ipairs(STACK_DATA) do
+    STACK_IDS[v.name] = i
+
+    --make the heights key by id as well
+    for i1, v1 in ipairs(STACK_DATA) do
+        v.heights[i1] = v.heights[v1.name]
+    end
 end
 
 if SnowmanConfig.SnowmanStackHeight > 6 then
