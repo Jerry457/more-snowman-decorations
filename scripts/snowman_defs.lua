@@ -183,6 +183,18 @@ local MoreDecorations = {
     wx78module_music = { canflip = true },
     wx78module_nightvision = { canflip = true },
     wx78module_taser = { canflip = true },
+    singingshell_octave3 = {
+        canflip = true,
+        bank = "singingshell_octave_decoration",
+    },
+    singingshell_octave4 = {
+        canflip = true,
+        bank = "singingshell_octave_decoration",
+    },
+    singingshell_octave5 = {
+        canflip = true,
+        bank = "singingshell_octave_decoration",
+    },
     lightbulb = {
         canflip = true,
         bloome_ffect = "shaders/anim.ksh",

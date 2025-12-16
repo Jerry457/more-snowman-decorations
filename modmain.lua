@@ -15,6 +15,7 @@ modimport("main/actions.lua")
 modimport("main/rpc.lua")
 
 Assets = {
+    Asset("ANIM", "anim/singingshell_octave_decoration.zip"),
     Asset("ANIM", "anim/item_rotate.zip"),
     Asset("ANIM", "anim/snowball.zip"),
 }
