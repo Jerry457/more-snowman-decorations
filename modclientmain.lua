@@ -1,6 +1,11 @@
 if not GLOBAL.IsInFrontEnd() then return end
 
+PreloadAssets = {
+    Asset("ANIM", "anim/snowy_rarities.zip"),
+}
+
 Assets = {
+    Asset("ANIM", "anim/snowy_rarities.zip"),
 }
 
 PrefabFiles = {

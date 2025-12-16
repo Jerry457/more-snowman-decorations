@@ -3,6 +3,8 @@ GLOBAL.setfenv(1, GLOBAL)
 local SnowmanPrefabs = require("snowman_utils").SnowmanPrefabs
 local SnowmanSkins = require("snowman_defs").SnowmanSkins
 
+GlassicAPI.SkinHandler.SetRarity("Snowy", 0.2, { 170 / 255, 197 / 255, 229 / 255, 1 }, "Snowy", "snowy_rarities")
+
 local skins = {}
 
 for _, prefab in ipairs(SnowmanPrefabs) do
