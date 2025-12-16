@@ -56,6 +56,11 @@ local function DoRunSounds(inst)
     end
 end
 
+-- 推雪球最大速度
+TUNING.PUSHING_SNOWBALL_MAX_SPEED = 10
+-- 每秒速度增量
+TUNING.PUSHING_SNOWBALL_SPEED_INCREMENT = 1
+
 AddStategraphPostInit("wilson", function(sg)
     if sg.states["pushing_walk"] == nil then
         return
@@ -95,7 +100,9 @@ AddStategraphPostInit("wilson", function(sg)
             end
         end
 
+        -- 依据鼠标位置，人物绕着雪球移动，间接实现雪球转向
         if inst.mouse_world_pos then
+            -- 人物朝向face_angle逐渐转向鼠标方向mouse_angle
             local mouse_angle = inst:GetAngleToPoint(inst.mouse_world_pos:Get())
             local face_angle = inst.Transform:GetRotation()
             local clockwise = GetRotationDirection(face_angle, mouse_angle)
@@ -105,9 +112,13 @@ AddStategraphPostInit("wilson", function(sg)
                 face_angle = face_angle + 4*clockwise
             end
             inst.Transform:SetRotation(face_angle)
+
+            -- 根据当前人物朝向face_angle确定人物目标位置dest_pos
             local target_pos = target:GetPosition()
             local mindist = inst:GetPhysicsRadius(0) + (target.components.pushable.mindist or 0)
             local dest_pos = GetDestByAngle(target_pos, face_angle, -mindist)
+
+            -- 根据到目标位置dest_pos的距离，负反馈调节人物移动速度，确保稳定
             local distsq = inst:GetDistanceSqToPoint(dest_pos:Get())
             local extra_speedmult = 1
             if distsq < 1 then
@@ -117,19 +128,24 @@ AddStategraphPostInit("wilson", function(sg)
             else
                 extra_speedmult = 1.5
             end
+
+            -- 无视人物当前朝向，设置全局坐标速度
             local walk_angle = inst:GetAngleToPoint(dest_pos:Get())
             local speed = target.components.pushable:GetOverridePushingSpeed() * inst.sg.statemem.speedmult
             SetWorldVelocity(inst, walk_angle, speed*extra_speedmult)
         end
 
+        -- 逐渐增大推雪球速度
         local size = target.components.snowmandecoratable:GetSize()
         if size ~= "small" then
             local old_speed = target.components.pushable:GetOverridePushingSpeed()
-            if old_speed < 10 then
-                target.components.pushable:SetOverridePushingSpeed(old_speed+0.03)
+            if old_speed < TUNING.PUSHING_SNOWBALL_MAX_SPEED then
+                local inc = TUNING.PUSHING_SNOWBALL_SPEED_INCREMENT / 30
+                target.components.pushable:SetOverridePushingSpeed(old_speed+inc)
             end
         end
 
+        -- 脚步声
         for i = 11, 23, 12 do
             if inst.AnimState:GetCurrentAnimationFrame() == i then
                 if inst.sg.statemem.lastfootstepframe ~= i then

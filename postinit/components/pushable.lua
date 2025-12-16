@@ -4,7 +4,8 @@ end
 
 GLOBAL.setfenv(1, GLOBAL)
 
-TUNING.SNOWBALL_DAMAGE = 30 -- 移动到全局配置
+-- 雪球冲击伤害
+TUNING.SNOWBALL_DAMAGE = 30
 
 local NON_COLLAPSIBLE_TAGS = {"stump", "flying", "shadow", "playerghost", "NOCLICK", "INLIMBO"}
 
@@ -24,9 +25,12 @@ function Pushable:StopPushing()
         return
     end
 
-    self.stop_task = self.inst:DoTaskInTime(0.8, function()
+    -- 脱手后延迟1秒钟结束滚动
+    self.stop_task = self.inst:DoTaskInTime(1, function()
         self.stop_task = nil
-        if not (self.doer and self.doer.sg and self.doer.sg:HasStateTag("pushing_walk") and self.doer:IsValid()) or (self.maxdist and not self.inst:IsNear(self.doer, self.doer:GetPhysicsRadius(0) + self.maxdist)) then
+        -- StopPushing会误触发，需要二次检测：玩家没有在推动 或 玩家不在附近
+        if not (self.doer and self.doer.sg and self.doer.sg:HasStateTag("pushing_walk") and self.doer:IsValid())
+            or (self.maxdist and not self.inst:IsNear(self.doer, self.doer:GetPhysicsRadius(0) + self.maxdist)) then
             _StopPushing(self)
             self:SetOverridePushingSpeed(nil)
         end
@@ -35,11 +39,13 @@ end
 
 local _OnUpdate = Pushable.OnUpdate
 function Pushable:OnUpdate(dt)
+    -- 覆盖雪球滚动速度
     local original_speed = self.speed
     self.speed = self.overridespeed or self.speed
     _OnUpdate(self, dt)
     self.speed = original_speed
 
+    -- 根据玩家到雪球的连线修改雪球方向
     local pos = self.inst:GetPosition()
     local angle = self.inst.Transform:GetRotation()
     if self.doer then
@@ -47,6 +53,7 @@ function Pushable:OnUpdate(dt)
         self.inst.Transform:SetRotation(angle)
     end
 
+    -- 处理碰撞
     local size = self.inst.components.snowmandecoratable:GetSize()
     if size ~= "small" then
         self:HandleCollision(pos, angle)
@@ -54,10 +61,12 @@ function Pushable:OnUpdate(dt)
 end
 
 function Pushable:HandleCollision(pos, angle)
+    -- 检测雪球前方范围是否有可碰撞的实体
     local forwardpos = GetDestByAngle(pos, angle, (self.mindist or 0) + 0.5)
     local ents = TheSim:FindEntities(forwardpos.x, 0, forwardpos.z, 0.85, nil, NON_COLLAPSIBLE_TAGS, {"blocker", "_health"})
     for i, ent in ipairs(ents) do
         local r = ent:GetPhysicsRadius(0)
+        -- 只碰撞有一定物理半径 或 有生命的实体
         if ent ~= self.inst and (r > 0.2 or ent.components.health) then
             if self.doer then
                 local str = "ANNOUNCE_I_MESSED_UP"
@@ -77,6 +86,7 @@ function Pushable:HandleCollision(pos, angle)
                     self.doer.components.talker:Say(GetString(self.doer, str))
                 end
             end
+            -- 调用StopPushing原始函数直接停止
             _StopPushing(self)
             if self.stop_task then
                 self.stop_task:Cancel()
