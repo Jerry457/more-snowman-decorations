@@ -15,6 +15,9 @@ STRINGS.SKIN_DESCRIPTIONS.snowball_item_icecream = "Now you can roll a literally
 STRINGS.SKIN_NAMES.snowball_item_invisible = "S·Noball"
 STRINGS.SKIN_DESCRIPTIONS.snowball_item_invisible = "Only the wise can see."
 
+STRINGS.SKIN_NAMES.snowball_item_meatball = "meatball"
+STRINGS.SKIN_DESCRIPTIONS.snowball_item_meatball = "Did you mix ice in your meatballs?"
+
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_I_MESSED_UP = "I messed up!"
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_TRY_MY_SNOWBALL = "Try my snowball!"
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_BIG_SNOWBALL_IS_COMMING = "big snowball is coming!"
