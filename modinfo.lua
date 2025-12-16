@@ -83,6 +83,13 @@ configuration_options = {
         default = 31,
     },
     {
+        name = "LargerSnowmanSize",
+        label = en_zh("Larger snowman size", "更大雪球尺寸"),
+        hover = en_zh("The super giant invincible snowball!", "超级巨型无敌大雪球！"),
+        options = get_numer_options(3, 5, 1),
+        default = 31,
+    },
+    {
         name = "MoreFunSnowball",
         label = en_zh("More fun snowball", "更好玩的滚雪球"),
         hover = en_zh("Can turn corners when rrolling snowball, and can collide other (Code source: WIGFRID)", "滚雪球时可以拐弯，并且可以撞击他人 (此功能代码来源于WIGFRI)"),

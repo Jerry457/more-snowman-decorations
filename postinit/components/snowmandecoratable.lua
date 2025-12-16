@@ -11,46 +11,49 @@ local SnowmanDecoratable = require("components/snowmandecoratable")
 local STACK_DATA = SnowmanDecoratable.STACK_DATA
 local STACK_IDS = SnowmanDecoratable.STACK_IDS
 
-STACK_DATA[1].heights.giant = 224
-STACK_DATA[1].heights.epic = 224
+if SnowmanConfig.LargerSnowmanSize > 3 then
+    STACK_DATA[1].heights.giant = 224
+    STACK_DATA[2].heights.giant = 224
+    STACK_DATA[3].heights.giant = 224
 
-STACK_DATA[2].heights.giant = 224
-STACK_DATA[2].heights.epic = 224
+    STACK_DATA[4] = {
+        name = "giant",
+        heights =
+        {
+            small = 256,
+            med = 234,
+            large = 224,
+            giant = 224,
+            epic = 123,
+        },
+        r = 145,
+        ycenter = 124,
+        yscale = 0.986,
+        stackheight = 5,
+    }
+end
 
-STACK_DATA[3].heights.giant = 224
-STACK_DATA[3].heights.epic = 224
+if SnowmanConfig.LargerSnowmanSize > 4 then
+    STACK_DATA[1].heights.epic = 224
+    STACK_DATA[2].heights.epic = 224
+    STACK_DATA[3].heights.epic = 224
 
-STACK_DATA[4] = {
-    name = "giant",
-    heights =
-    {
-        small = 256,
-        med = 234,
-        large = 224,
-        giant = 224,
-        epic = 123,
-    },
-    r = 145,
-    ycenter = 124,
-    yscale = 0.986,
-    stackheight = 5,
-}
-
-STACK_DATA[5] = {
-    name = "epic",
-    heights =
-    {
-        small = 256,
-        med = 234,
-        large = 224,
-        giant = 224,
-        epic = 123,
-    },
-    r = 145,
-    ycenter = 124,
-    yscale = 0.986,
-    stackheight = 7,
-}
+    STACK_DATA[5] = {
+        name = "epic",
+        heights =
+        {
+            small = 256,
+            med = 234,
+            large = 224,
+            giant = 224,
+            epic = 123,
+        },
+        r = 145,
+        ycenter = 124,
+        yscale = 0.986,
+        stackheight = 7,
+    }
+end
 
 for i, v in ipairs(STACK_DATA) do
     STACK_IDS[v.name] = i
