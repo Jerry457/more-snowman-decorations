@@ -203,7 +203,13 @@ local MoreDecorations = {
         canflip = true,
         custom_animation_num_rots = 16,
         use_point_filtering = true,
-        mult_colour = { 1, 1, 1, 1 },
+        bloome_ffect = "shaders/anim.ksh",
+        fn = function(inst)
+            inst.AnimState:SetSymbolLightOverride("pb_energy_loop", .5)
+            inst.AnimState:SetSymbolLightOverride("pb_ray", .5)
+            inst.AnimState:SetSymbolLightOverride("SparkleBit", .5)
+            inst.AnimState:SetLightOverride(.1)
+        end
     },
 }
 
