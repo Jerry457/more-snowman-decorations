@@ -44,8 +44,8 @@ server_filter_tags = {  --服务器标签
 }
 
 local boolean_options = {
-    {description = "开启", data = true},
-    {description = "关闭", data = false}
+    {description = en_zh("Enable", "开启"), data = true},
+    {description = en_zh("Disable", "关闭"), data = false},
 }
 
 local function get_numer_options(min, max, step)
@@ -95,5 +95,16 @@ configuration_options = {
         hover = en_zh("Can turn corners when rrolling snowball, and can collide other (Code source: WIGFRID)", "滚雪球时可以拐弯，并且可以撞击他人 (此功能代码来源于WIGFRI)"),
         options = boolean_options,
         default = true,
+    },
+    {
+        name = "PUSHING_SNOWBALL_MAX_SPEED",
+        label = en_zh("pushing snowball max speed", "推雪球最大速度"),
+        hover = en_zh("The snowball has no brakes!", "雪球没有刹车！"),
+        options = {
+            {description = 10, data = 10},
+            {description = 20, data = 20},
+            {description = 9999, data = 9999},
+        },
+        default = 10,
     },
 }

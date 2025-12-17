@@ -1,7 +1,7 @@
 GLOBAL.setfenv(1, GLOBAL)
 
 TUNING.SNOWBALL_DAMAGE = 30  -- 推雪球伤害
-TUNING.PUSHING_SNOWBALL_MAX_SPEED = 10  -- 推雪球最大速度
+TUNING.PUSHING_SNOWBALL_MAX_SPEED = SnowmanConfig.PUSHING_SNOWBALL_MAX_SPEED  -- 推雪球最大速度
 TUNING.PUSHING_SNOWBALL_SPEED_INCREMENT = 1  -- 每秒速度增量
 
 if SnowmanConfig.UnlimitSnowmanDecorate then
