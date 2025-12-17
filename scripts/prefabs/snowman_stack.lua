@@ -28,8 +28,6 @@ local function fn()
 
     -- inst:AddTag("FX")
 
-    inst.persists = false
-
     inst.entity:AddNetwork()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
@@ -49,6 +47,8 @@ local function fn()
     if not TheWorld.ismastersim then
         return inst
     end
+
+    inst.persists = false
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.GetDescription = GetDescription

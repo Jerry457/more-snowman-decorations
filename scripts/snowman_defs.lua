@@ -224,38 +224,31 @@ local MoreDecorations = {
         mult_colour = { 1, 1, 1, 0.5 },
         anim = "shell",
         fn = function(inst, itemdata, flip, rot, isinfrontend)
-            if TheNet:IsDedicated() then
-                return
-            end
-
             local animation = "core" .. (flip and itemdata.canflip and "_flip_" or "_") .. (rot - 1)
             if inst.core then
                 inst.core.AnimState:PlayAnimation(animation, true)
                 return
             end
 
-            local core = CreateEntity()
-
-            core:AddTag("FX")
-            --[[Non-networked entity]]
-            --core.entity:SetCanSleep(false)
-            core.persists = false
-
-            if isinfrontend then
-                core.entity:AddUITransform()
+            if TheWorld.ismastersim and not isinfrontend then
+                inst.core = SpawnPrefab("horrorfuel_core_fx")
             else
-                core.entity:AddTransform()
+                inst.core = CreateEntity()
+                inst.core.persists = false
+                if isinfrontend then
+                    inst.core.entity:AddUITransform()
+                else
+                    inst.core.entity:AddTransform()
+                end
+                inst.core.entity:AddAnimState()
+                inst.core.AnimState:SetBank(itemdata.bank)
+                inst.core.AnimState:SetBuild(itemdata.build)
+                inst.core.AnimState:SetFinalOffset(1)
             end
-            core.entity:AddAnimState()
 
-            core.AnimState:SetBank(itemdata.bank)
-            core.AnimState:SetBuild(itemdata.build)
+            inst.core.AnimState:PlayAnimation(animation, true)
+            inst.core.AnimState:SetFrame(math.random(inst.core.AnimState:GetCurrentAnimationNumFrames()) - 1)
 
-            core.AnimState:PlayAnimation(animation, true)
-            core.AnimState:SetFrame(math.random(core.AnimState:GetCurrentAnimationNumFrames()) - 1)
-            core.AnimState:SetFinalOffset(1)
-
-            inst.core = core
             inst.highlightchildren = { inst.core }
             inst.core.entity:SetParent(inst.entity)
 
