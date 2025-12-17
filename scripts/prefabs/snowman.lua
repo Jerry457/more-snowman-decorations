@@ -71,6 +71,14 @@ for i, data in ipairs(SIZE_DATA) do
     SNOW_TO_GROW[data.size] = data.snow_to_grow
 end
 
+local function IsMaxSize(size)
+    for i, data in pairs(SIZE_DATA) do
+        if size == data.size and i >= SnowmanConfig.LargerSnowmanSize then
+            return true
+        end
+    end
+end
+
 local function _GetNextSize(size)
     for i, data in ipairs(SIZE_DATA) do
         if size == data.size and SIZE_DATA[i + 1] then
@@ -188,7 +196,7 @@ local function _GrowSnowballSize(inst, doer)
         end
 
         local oldsize = inst.components.snowmandecoratable:GetSize()
-        if oldsize == "epic" then
+        if IsMaxSize(oldsize) then
             inst._pushingtask:Cancel()
             inst._pushingtask = inst:DoPeriodicTask(8, _SnowballTooBigWarning, 0.8, doer)
         else
@@ -203,7 +211,7 @@ local function _GrowSnowballSize(inst, doer)
                     inst:SetSize(newsize, true)
                     inst.snowaccum = 0
                 end
-                if newsize == "epic" then
+                if IsMaxSize(newsize) then
                     inst._pushingtask:Cancel()
                     inst._pushingtask = inst:DoPeriodicTask(8, _SnowballTooBigWarning, 1.6, doer)
                 end

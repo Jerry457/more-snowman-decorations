@@ -1,8 +1,8 @@
 SnowmanConfig = {
     WaxedSnowmanCanStack = GetModConfigData("WaxedSnowmanCanStack"),
     UnlimitSnowmanDecorate = GetModConfigData("UnlimitSnowmanDecorate"),
-    SnowmanStackHeight = GetModConfigData("SnowmanStackHeight") or 3,
-    LargerSnowmanSize = GetModConfigData("LargerSnowmanSize") or 6,
+    SnowmanStackHeight = GetModConfigData("SnowmanStackHeight") or 6,
+    LargerSnowmanSize = GetModConfigData("LargerSnowmanSize") or 3,
     MoreFunSnowball = GetModConfigData("MoreFunSnowball"),
 }
 GLOBAL.SnowmanConfig = SnowmanConfig

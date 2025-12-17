@@ -87,7 +87,7 @@ configuration_options = {
         label = en_zh("Larger snowman size", "更大雪球尺寸"),
         hover = en_zh("The super giant invincible snowball!", "超级巨型无敌大雪球！"),
         options = get_numer_options(3, 5, 1),
-        default = 31,
+        default = 5,
     },
     {
         name = "MoreFunSnowball",
