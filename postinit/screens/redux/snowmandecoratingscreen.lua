@@ -77,13 +77,13 @@ end
 local _StartDraggingItem = SnowmanDecoratingScreen.StartDraggingItem
 function SnowmanDecoratingScreen:StartDraggingItem(obj, ...)
     _StartDraggingItem(self, obj, ...)
-    SnowmanDecoratable.SnowmanDecorateCommon(self.dragitem.inst, self.dragitem.itemdata, self.dragitem.flip, self.dragitem.rot)
+    SnowmanDecoratable.SnowmanDecorateCommon(self.dragitem.inst, self.dragitem.itemdata, self.dragitem.flip, self.dragitem.rot, true)
 end
 
 local _DoAddItemAt = SnowmanDecoratingScreen.DoAddItemAt
 function SnowmanDecoratingScreen:DoAddItemAt(x, y, itemhash, itemdata, rot, flip, ...) --snowball local space
     local decor = _DoAddItemAt(self, x, y, itemhash, itemdata, rot, flip, ...)
-    SnowmanDecoratable.SnowmanDecorateCommon(decor.inst, itemdata, flip, rot)
+    SnowmanDecoratable.SnowmanDecorateCommon(decor.inst, itemdata, flip, rot, true)
     return decor
 end
 
@@ -107,11 +107,10 @@ function SnowmanDecoratingScreen:RotateDraggingItem(delta, ...)
         while self.dragitem.rot < 1 do
             self.dragitem.rot = self.dragitem.rot + num_rots
         end
-        local animation = itemdata.anim .. (self.dragitem.flip and itemdata.canflip and "_flip_" or "_") .. (self.dragitem.rot - 1)
-        self.dragitem:GetAnimState():PlayAnimation(animation, true)
     else
         _RotateDraggingItem(self, delta, ...)
     end
+    SnowmanDecoratable.SnowmanDecorateCommon(self.dragitem.inst, self.dragitem.itemdata, self.dragitem.flip, self.dragitem.rot, true)
 end
 
 local _FlipDraggingItem = SnowmanDecoratingScreen.FlipDraggingItem
@@ -121,8 +120,24 @@ function SnowmanDecoratingScreen:FlipDraggingItem(...)
         self.dragitem.flip = not self.dragitem.flip
         local rot = ((num_rots - self.dragitem.rot + 1) % num_rots) + 1
         self.dragitem.rot = rot
-        SnowmanDecoratable.SnowmanDecorateCommon(self.dragitem.inst, self.dragitem.itemdata, self.dragitem.flip, self.dragitem.rot)
     else
         _FlipDraggingItem(self, ...)
     end
+    SnowmanDecoratable.SnowmanDecorateCommon(self.dragitem.inst, self.dragitem.itemdata, self.dragitem.flip, self.dragitem.rot, true)
+end
+
+local INVALID_ALPHA = 0.4
+local _MoveDraggingItemTo = SnowmanDecoratingScreen.MoveDraggingItemTo
+function SnowmanDecoratingScreen:MoveDraggingItemTo(x, y, ...)
+    local valid = _MoveDraggingItemTo(self, x, y, ...)
+    local mult_colour = {1, 1, 1, 1}
+    if self.dragitem.itemdata and self.dragitem.itemdata.mult_colour then
+        mult_colour = deepcopy(self.dragitem.itemdata.mult_colour)
+    end
+    if not valid then
+        mult_colour[4] = mult_colour[4] * INVALID_ALPHA
+    end
+    self.dragitem:GetAnimState():SetMultColour(unpack(mult_colour))
+
+    return valid
 end

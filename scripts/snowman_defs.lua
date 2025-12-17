@@ -209,7 +209,6 @@ local MoreDecorations = {
     shadowheart_infused = {
         canflip = true,
         custom_animation_num_rots = 16,
-        use_point_filtering = true,
     },
     nightmarefuel = {
         canflip = true,
@@ -221,7 +220,46 @@ local MoreDecorations = {
         canflip = true,
         custom_animation_num_rots = 16,
         use_point_filtering = true,
-        mult_colour = { 1, 1, 1, 1 },
+        mult_colour = { 1, 1, 1, 0.5 },
+        anim = "shell",
+        fn = function(inst, itemdata, flip, rot, isinfrontend)
+            if TheNet:IsDedicated() then
+                return
+            end
+
+            local animation = "core" .. (flip and itemdata.canflip and "_flip_" or "_") .. (rot - 1)
+            if inst.core then
+                inst.core.AnimState:PlayAnimation(animation, true)
+                return
+            end
+
+            local core = CreateEntity()
+
+            core:AddTag("FX")
+            --[[Non-networked entity]]
+            --core.entity:SetCanSleep(false)
+            core.persists = false
+
+            if isinfrontend then
+                core.entity:AddUITransform()
+            else
+                core.entity:AddTransform()
+            end
+            core.entity:AddAnimState()
+
+            core.AnimState:SetBank(itemdata.bank)
+            core.AnimState:SetBuild(itemdata.build)
+
+            core.AnimState:PlayAnimation(animation, true)
+            core.AnimState:SetFrame(math.random(core.AnimState:GetCurrentAnimationNumFrames()) - 1)
+            core.AnimState:SetFinalOffset(1)
+
+            inst.core = core
+            inst.highlightchildren = { inst.core }
+            inst.core.entity:SetParent(inst.entity)
+
+            inst.AnimState:SetFrame(math.random(inst.AnimState:GetCurrentAnimationNumFrames()) - 1)
+        end
     },
     purebrilliance = {
         canflip = true,

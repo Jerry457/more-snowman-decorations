@@ -177,7 +177,7 @@ function SnowmanDecoratable:OnLoad(data, newents, ...)
     return _OnLoad(self, data, newents, ...)
 end
 
-function SnowmanDecoratable.SnowmanDecorateCommon(inst, itemdata, flip, rot)
+function SnowmanDecoratable.SnowmanDecorateCommon(inst, itemdata, flip, rot, isinfrontend)
     if itemdata.light then
         if not inst.Light then
             inst.entity:AddLight()
@@ -226,7 +226,7 @@ function SnowmanDecoratable.SnowmanDecorateCommon(inst, itemdata, flip, rot)
     end
 
     if itemdata.fn then
-        itemdata.fn(inst, itemdata, flip, rot)
+        itemdata.fn(inst, itemdata, flip, rot, isinfrontend)
     end
 end
 
