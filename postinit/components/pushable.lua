@@ -17,21 +17,33 @@ end
 
 local Pushable = require("components/pushable")
 local _StopPushing = Pushable.StopPushing
-function Pushable:StopPushing()
+
+function Pushable:StopImmediately(doer)
     if self.stop_task then
-        return
+        self.stop_task:Cancel()
+        self.stop_task = nil
     end
 
-    -- 脱手后延迟1秒钟结束滚动
-    self.stop_task = self.inst:DoTaskInTime(1, function()
-        self.stop_task = nil
-        -- StopPushing会误触发，需要二次检测：玩家没有在推动 或 玩家不在附近
-        if not (self.doer and self.doer.sg and self.doer.sg:HasStateTag("pushing_walk") and self.doer:IsValid())
-            or (self.maxdist and not self.inst:IsNear(self.doer, self.doer:GetPhysicsRadius(0) + self.maxdist)) then
-            _StopPushing(self)
-            self:SetOverridePushingSpeed(nil)
+    _StopPushing(self, doer)
+    self:SetOverridePushingSpeed(nil)
+end
+
+function Pushable:StopPushing(doer)
+    if not doer then
+        self:StopImmediately()
+    else
+        if not self.stop_task then
+            -- 脱手后延迟1秒钟结束滚动
+            self.stop_task = self.inst:DoTaskInTime(1, function()
+                self.stop_task = nil
+                -- StopPushing会误触发，需要二次检测：玩家没有在推动 或 玩家不在附近
+                if not (self.doer and self.doer.sg and self.doer.sg:HasStateTag("pushing_walk") and self.doer:IsValid())
+                    or (self.maxdist and not self.inst:IsNear(self.doer, self.doer:GetPhysicsRadius(0) + self.maxdist)) then
+                    self:StopImmediately(doer)
+                end
+            end)
         end
-    end)
+    end
 end
 
 local _OnUpdate = Pushable.OnUpdate
@@ -83,12 +95,7 @@ function Pushable:HandleCollision(pos, angle)
                     self.doer.components.talker:Say(GetString(self.doer, str))
                 end
             end
-            -- 调用StopPushing原始函数直接停止
-            _StopPushing(self)
-            if self.stop_task then
-                self.stop_task:Cancel()
-                self.stop_task = nil
-            end
+            self:StopImmediately()
             if self.inst.components.workable then
                 self.inst.components.workable:Destroy(self.inst)
             end
