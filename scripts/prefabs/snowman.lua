@@ -594,7 +594,8 @@ local function DoBreakApart(inst, isdestroyed)
             end
         end
         for i = 1, num do
-            inst.components.lootdropper:SpawnLootPrefab("snowball_item", pt)
+            local item = inst.components.lootdropper:SpawnLootPrefab("snowball_item", pt)
+            SetSnowmanSkin(item, inst.skin_type)
         end
     end
     inst:Remove()
