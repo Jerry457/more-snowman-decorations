@@ -73,7 +73,7 @@ end
 
 local function IsMaxSize(size)
     for i, data in pairs(SIZE_DATA) do
-        if size == data.size and i >= SnowmanConfig.LargerSnowmanSize then
+        if size == data.size and i >= SnowmanConfig.MaxSnowmanSize then
             return true
         end
     end
