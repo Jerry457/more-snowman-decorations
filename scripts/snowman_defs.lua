@@ -114,6 +114,7 @@ local MoreDecorations = {
     furtuft = { canflip = true },
     garlic_cooked = { canflip = true },
     garlic = { canflip = true },
+    messagebottle = { canflip = true },
     gelblob_bottle = { canflip = true },
     glommerfuel = { canflip = true },
     glommerwings = { canflip = true },
@@ -204,6 +205,13 @@ local MoreDecorations = {
             radius = 0.5,
             colour = Vector3(237, 237, 209),
         },
+    },
+    shadowheart = { canflip = true },
+    shadowheart_infused = {
+        canflip = true,
+        custom_animation_num_rots = 16,
+        use_point_filtering = true,
+        mult_colour = { 1, 1, 1, 1 },
     },
     nightmarefuel = {
         canflip = true,
