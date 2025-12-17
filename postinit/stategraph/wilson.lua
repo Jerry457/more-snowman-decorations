@@ -56,6 +56,13 @@ local function DoRunSounds(inst)
     end
 end
 
+local function EnableTrailCheck(old_speed, new_speed)
+    local threshold = math.min(10, 0.85 * TUNING.PUSHING_SNOWBALL_MAX_SPEED)
+    if old_speed < threshold and new_speed >= threshold then
+        return true
+    end
+end
+
 AddStategraphPostInit("wilson", function(sg)
     if sg.states["pushing_walk"] == nil then
         return
@@ -136,7 +143,12 @@ AddStategraphPostInit("wilson", function(sg)
             local old_speed = target.components.pushable:GetOverridePushingSpeed()
             if old_speed < TUNING.PUSHING_SNOWBALL_MAX_SPEED then
                 local inc = TUNING.PUSHING_SNOWBALL_SPEED_INCREMENT / 30
-                target.components.pushable:SetOverridePushingSpeed(old_speed+inc)
+                local new_speed = old_speed + inc
+                target.components.pushable:SetOverridePushingSpeed(new_speed)
+                -- 启用残影
+                if EnableTrailCheck(old_speed, new_speed) then
+                    inst:SnowManEnableSprintTrail(true)
+                end
             end
         end
 
@@ -151,5 +163,12 @@ AddStategraphPostInit("wilson", function(sg)
                 break
             end
         end
+    end
+
+    local old_onexit = sg.states["pushing_walk"].onexit
+    sg.states["pushing_walk"].onexit = function(inst)
+        old_onexit(inst)
+        -- 关闭残影
+        inst:SnowManEnableSprintTrail(false)
     end
 end)
