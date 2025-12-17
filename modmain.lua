@@ -14,10 +14,12 @@ modimport("main/strings.lua")
 modimport("main/prefab_skins.lua")
 modimport("main/postinit.lua")
 modimport("main/prefab_files.lua")
+modimport("main/recipes.lua")
 modimport("main/actions.lua")
 modimport("main/rpc.lua")
 
 Assets = {
+    Asset("ATLAS", "images/snowball_crafting_menu_icons.xml"),
     Asset("ANIM", "anim/singingshell_octave_decoration.zip"),
     Asset("ANIM", "anim/item_rotate.zip"),
     Asset("ANIM", "anim/snowball.zip"),

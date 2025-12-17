@@ -15,6 +15,18 @@ local function OnEquip(inst, owner)
     owner.AnimState:Hide("ARM_normal")
 end
 
+local function onPreBuilt(inst, builder, materials, recipe)
+    for item, ents in pairs(materials) do
+        if item == "snowball_item" then
+            for ent, num in pairs(ents) do
+                local data = ent.components.perishable:OnSave()
+                inst.components.perishable:OnLoad(data)
+                break
+            end
+        end
+    end
+end
+
 AddPrefabPostInit("snowball_item", function(inst)
     if not TheWorld.ismastersim then
         return
@@ -31,4 +43,6 @@ AddPrefabPostInit("snowball_item", function(inst)
     inst.components.pushable.onstartpushingfn = function(inst, ...)
         return SpawnSnowmanHook(inst.skin_type, OnStartPushing, inst, ...)
     end
+
+    inst.onPreBuilt = onPreBuilt
 end)

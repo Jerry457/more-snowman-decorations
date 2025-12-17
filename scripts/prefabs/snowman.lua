@@ -706,6 +706,14 @@ local function OnDoMeltAction(inst)
     end
 end
 
+local function TurnOn(inst)
+    -- inst.SoundEmitter:PlaySound("", "turnon")
+end
+
+local function TurnOff(inst)
+    -- inst.SoundEmitter:KillSound("turnon")
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -782,6 +790,11 @@ local function fn()
     inst.components.snowballmelting:SetOnStopMelting(OnStopMelting)
     inst.components.snowballmelting:SetOnDoMeltAction(OnDoMeltAction)
     inst.components.snowballmelting:AllowMelting()
+
+    inst:AddComponent("prototyper")
+    inst.components.prototyper.trees = TUNING.PROTOTYPER_TREES.SNOWMAN_TECHNOLOGY
+    inst.components.prototyper.onturnon = TurnOn
+    inst.components.prototyper.onturnoff = TurnOff
 
     --inst._pushingtask = nil
     --inst._nosnowtask = nil

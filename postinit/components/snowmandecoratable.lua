@@ -226,7 +226,7 @@ function SnowmanDecoratable.SnowmanDecorateCommon(inst, itemdata, flip, rot)
     end
 
     if itemdata.fn then
-        itemdata.fn(inst, itemdata)
+        itemdata.fn(inst, itemdata, flip, rot)
     end
 end
 
