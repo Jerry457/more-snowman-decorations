@@ -531,6 +531,13 @@ local function OnStacksChanged(inst, stacks, stackoffsets, reason)
                 inst.stacks[i] = nil
             end
         end
+
+        if inst:HasTag("waxedplant") or inst.components.snowmandecoratable:IsStacked() then
+            inst:AddComponent("prototyper")
+            inst.components.prototyper.trees = TUNING.PROTOTYPER_TREES.SNOWMAN_TECHNOLOGY
+        else
+            inst:RemoveComponent("prototyper")
+        end
     end
     RefreshPhysicsSize(inst, basesize, stacks)
 end
@@ -790,11 +797,6 @@ local function fn()
     inst.components.snowballmelting:SetOnStopMelting(OnStopMelting)
     inst.components.snowballmelting:SetOnDoMeltAction(OnDoMeltAction)
     inst.components.snowballmelting:AllowMelting()
-
-    inst:AddComponent("prototyper")
-    inst.components.prototyper.trees = TUNING.PROTOTYPER_TREES.SNOWMAN_TECHNOLOGY
-    inst.components.prototyper.onturnon = TurnOn
-    inst.components.prototyper.onturnoff = TurnOff
 
     --inst._pushingtask = nil
     --inst._nosnowtask = nil
