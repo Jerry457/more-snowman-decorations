@@ -211,6 +211,12 @@ local MoreDecorations = {
         use_point_filtering = true,
         mult_colour = { 1, 1, 1, 0.5 },
     },
+    horrorfuel = {
+        canflip = true,
+        custom_animation_num_rots = 16,
+        use_point_filtering = true,
+        mult_colour = { 1, 1, 1, 1 },
+    },
     purebrilliance = {
         canflip = true,
         custom_animation_num_rots = 16,
