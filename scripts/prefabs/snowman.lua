@@ -664,16 +664,32 @@ local function OnLoad(inst, data)
 end
 
 local function DisplayNameFn(inst)
-    return not inst.components.snowmandecoratable:IsStacked()
-        and (    inst.components.snowmandecoratable:GetSize() == "small" and
-                STRINGS.NAMES.SNOWBALL_ITEM or
-                STRINGS.NAMES.SNOWBALL_LARGE
-            )
-        or nil
+    if inst.components.snowmandecoratable:IsStacked() then
+        return
+    end
+
+    local build = inst.AnimState:GetBuild() or "snowball"
+    local skin = string.gsub(build, "snowball", "")
+    local size = inst.components.snowmandecoratable:GetSize()
+    if skin ~= "" then
+        return STRINGS.NAMES.SNOWBALL_SIZE_PREFIX[string.upper(size)] .. STRINGS.SKIN_NAMES["snowball_item" .. skin]
+    else
+        return STRINGS.NAMES.SNOWBALL_SIZE_PREFIX[string.upper(size)] .. STRINGS.NAMES.SNOWBALL_ITEM
+    end
 end
 
-local function GetStatus(inst)
-    return not inst.components.snowmandecoratable:IsStacked() and "SNOWBALL" or nil
+local function DescriptionFn(inst, viewer)
+    if inst.components.snowmandecoratable:IsStacked() then
+        return GetDescription(viewer, inst, inst.components.inspectable:GetStatus(viewer))
+    end
+
+    local build = inst.AnimState:GetBuild() or "snowball"
+    local skin = string.gsub(build, "snowball", "")
+    if skin ~= "" then
+        return STRINGS.SKIN_DESCRIPTIONS["snowball_item" .. skin]
+    else
+        return GetDescription(viewer, inst, inst.components.inspectable:GetStatus(viewer))
+    end
 end
 
 local function OnStartMelting(inst)
@@ -731,7 +747,7 @@ local function fn()
     _AddWaxableComponent(inst)
 
     inst:AddComponent("inspectable")
-    inst.components.inspectable.getstatus = GetStatus
+    inst.components.inspectable.descriptionfn = DescriptionFn
 
     inst.components.snowmandecoratable.onopenfn = CheckLiftAndPushable
     inst.components.snowmandecoratable.onclosefn = CheckLiftAndPushable

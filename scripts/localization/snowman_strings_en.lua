@@ -1,5 +1,13 @@
 GLOBAL.setfenv(1, GLOBAL)
 
+STRINGS.NAMES.SNOWBALL_SIZE_PREFIX = {
+    SMALL = "",
+    MED = "Med ",
+    LARGE = "Large ",
+    GIANT = "GIANT ",
+    EPIC = "The Super Giant Invincible",
+}
+
 STRINGS.SKIN_TAG_CATEGORIES.COLLECTION.SNOWY = "Snowy Collection"
 STRINGS.UI.RARITY.Snowy = "Snowy"
 
@@ -20,4 +28,4 @@ STRINGS.SKIN_DESCRIPTIONS.snowball_item_meatball = "Did you mix ice in your meat
 
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_I_MESSED_UP = "I messed up!"
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_TRY_MY_SNOWBALL = "Try my snowball!"
-STRINGS.CHARACTERS.GENERIC.ANNOUNCE_BIG_SNOWBALL_IS_COMMING = "big snowball is coming!"
+STRINGS.CHARACTERS.GENERIC.ANNOUNCE_BIG_SNOWBALL_IS_COMMING = "I just realized that the snowball has no brakes!"
