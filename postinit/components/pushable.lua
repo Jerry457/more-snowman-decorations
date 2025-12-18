@@ -80,7 +80,8 @@ function Pushable:HandleCollision(pos, angle)
                 local str = "ANNOUNCE_I_MESSED_UP"
                 if ent.components.health and not ent.components.health:IsDead() then
                     if ent.components.combat then
-                        ent.components.combat:GetAttacked(self.doer, TUNING.SNOWBALL_DAMAGE)
+                        local damage = self:GetCollisionDamage()
+                        ent.components.combat:GetAttacked(self.doer, damage)
                     end
                     str = "ANNOUNCE_TRY_MY_SNOWBALL"
                 end
@@ -101,6 +102,12 @@ function Pushable:HandleCollision(pos, angle)
             break
         end
     end
+end
+
+function Pushable:GetCollisionDamage()
+    local speed = self:GetOverridePushingSpeed()
+    local mult = speed / math.min(10, TUNING.PUSHING_SNOWBALL_MAX_SPEED)
+    return TUNING.SNOWBALL_DAMAGE * mult
 end
 
 function Pushable:SetOverridePushingSpeed(speed)
