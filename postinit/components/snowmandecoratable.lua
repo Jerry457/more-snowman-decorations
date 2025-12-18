@@ -140,6 +140,7 @@ function SnowmanDecoratable:Unstack(isdestroyed)
             end
             self.inst.components.inventoryitem:DoDropPhysics(x, 0, z, true, 0.5)
         end
+        self:SetStackSkins(empty)
     end
 end
 
