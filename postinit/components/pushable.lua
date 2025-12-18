@@ -30,8 +30,7 @@ end
 
 function Pushable:StopPushing(doer)
     if self.stop_task then
-        self.stop_task:Cancel()
-        self.stop_task = nil
+        return
     end
 
     if not doer then
