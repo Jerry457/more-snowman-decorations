@@ -56,7 +56,7 @@ function Pushable:OnUpdate(dt)
     -- 根据玩家到雪球的连线修改雪球方向
     local pos = self.inst:GetPosition()
     local angle = self.inst.Transform:GetRotation()
-    if self.doer then
+    if self.doer and not self.stop_task then
         angle = self.doer:GetAngleToPoint(pos:Get())
         self.inst.Transform:SetRotation(angle)
     end
