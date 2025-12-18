@@ -13,5 +13,3 @@ AddPlayerPostInit(function(player)
     local colour = {0, 0, 1, 0}
     TrailFns.SetTrailColour(player, colour)
 end)
-
-

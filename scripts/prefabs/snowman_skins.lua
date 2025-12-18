@@ -4,7 +4,7 @@ local SnowmanSkins = require("snowman_defs").SnowmanSkins
 local SnowmanPrefabs = require("snowman_utils").SnowmanPrefabs
 
 for _, snow_prefab in ipairs(SnowmanPrefabs) do
-    for i, skin_type in ipairs(SnowmanSkins) do
+    for skin_type, data in pairs(SnowmanSkins) do
         local skin_build = "snowball_" .. skin_type
 
         table.insert(prefabs, CreatePrefabSkin(snow_prefab .. "_" .. skin_type, {
@@ -15,6 +15,7 @@ for _, snow_prefab in ipairs(SnowmanPrefabs) do
             init_fn = function(inst)
                 GlassicAPI.BasicInitFn(inst)
                 inst.skin_type = skin_type
+                inst.trail_colour = data.colour
                 inst.AnimState:SetRayTestOnBB(inst.skin_type == "invisible")
                 inst:PushEvent("onskinschanged")
             end,

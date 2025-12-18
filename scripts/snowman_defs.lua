@@ -1,10 +1,23 @@
 local SnowmanSkins = {
-    "dungball",
-    "tumbleweed",
-    "icecream",
-    "invisible",
-    "meatball",
-    "coconut",
+    -- 颜色需要配置
+    dungball = {
+        colour = Vector3(255, 25.5, 25.5),
+    },
+    tumbleweed = {
+        colour = Vector3(255, 25.5, 25.5),
+    },
+    icecream = {
+        colour = Vector3(255, 25.5, 25.5),
+    },
+    invisible = {
+        colour = Vector3(255, 25.5, 25.5),
+    },
+    meatball = {
+        colour = Vector3(255, 25.5, 25.5),
+    },
+    coconut = {
+        colour = Vector3(255, 25.5, 25.5),
+    },
 }
 
 local MoreDecorations = {

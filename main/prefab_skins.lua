@@ -11,12 +11,13 @@ for _, prefab in ipairs(SnowmanPrefabs) do
     _G[prefab .. "_clear_fn"] = function(inst)
         basic_clear_fn(inst, "snowball")
         inst.skin_type = nil
+        inst.trail_colour = nil
         inst.AnimState:SetRayTestOnBB(false)
         inst:PushEvent("onskinschanged")
     end
 
     skins[prefab] = {}
-    for i, skin_type in ipairs(SnowmanSkins) do
+    for skin_type in pairs(SnowmanSkins) do
         table.insert(skins[prefab], prefab .. "_" .. skin_type)
     end
 end

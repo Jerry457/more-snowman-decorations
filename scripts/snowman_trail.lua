@@ -56,7 +56,6 @@ local function CreateSprintTrailFx(inst)
 	fx.Transform:SetFourFaced()
 
 	fx.AnimState:SetBank("wilson")
-	fx.AnimState:SetBuild(inst.AnimState:GetBuild())
 	fx.AnimState:UsePointFiltering(true)
     fx.AnimState:SetSortOrder(0)
 	fx.AnimState:SetScale(1.035, 1.035)
@@ -78,6 +77,12 @@ local function GetSprintTrailFx(inst)
 		fx = CreateSprintTrailFx(inst)
 	end
     fx.AnimState:SetAddColour(unpack(inst[COLOR_VAL]))
+
+    if inst.AnimState:GetSkinBuild() == "" then
+        fx.AnimState:SetBuild(inst.AnimState:GetBuild())
+    else
+        fx.AnimState:SetBuild(inst.prefab)
+    end
 
 	--Reset the entity
 	fx.a = nil
@@ -254,9 +259,12 @@ local function OnEnableMovementPrediction_Client(inst, enable)
 end
 
 local function SetUpSprintTrail(inst, colour)
+    inst[COLOR_VAL] = colour or {1, 1, 1, 0}
 
+    if inst[HAS_TRAIL_VAL] then
+        return
+    end
 	inst[HAS_TRAIL_VAL] = net_bool(inst.GUID, HAS_TRAIL_VAL, HAS_TRAIL_DIRTY_EVENT)
-	inst[COLOR_VAL] = colour or {1, 1, 1, 0}
 
 	if TheWorld.ismastersim then
 		inst[ENABLE_FN] = EnableSprintTrail_Server
