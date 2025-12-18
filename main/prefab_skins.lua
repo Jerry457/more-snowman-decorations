@@ -2,6 +2,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local SnowmanPrefabs = require("snowman_utils").SnowmanPrefabs
 local SnowmanSkins = require("snowman_defs").SnowmanSkins
+local SetTrailColour = require("snowman_trail").SetTrailColour
 
 GlassicAPI.SkinHandler.SetRarity("Snowy", 0.2, { 170 / 255, 197 / 255, 229 / 255, 1 }, "Snowy", "snowy_rarities")
 
@@ -11,7 +12,7 @@ for _, prefab in ipairs(SnowmanPrefabs) do
     _G[prefab .. "_clear_fn"] = function(inst)
         basic_clear_fn(inst, "snowball")
         inst.skin_type = nil
-        inst.trail_colour = nil
+        SetTrailColour(inst, {0, 0, 0, 0})
         inst.AnimState:SetRayTestOnBB(false)
         inst:PushEvent("onskinschanged")
     end

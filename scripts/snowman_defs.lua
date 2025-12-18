@@ -1,22 +1,22 @@
 local SnowmanSkins = {
     -- 颜色需要配置
     dungball = {
-        colour = Vector3(255, 25.5, 25.5),
+        colour = {0/255, 0/255, 0/255, 0},
     },
     tumbleweed = {
-        colour = Vector3(255, 25.5, 25.5),
+        colour = {0/255, 0/255, 0/255, 0},
     },
     icecream = {
-        colour = Vector3(255, 25.5, 25.5),
+        colour = {0/255, 0/255, 0/255, 0},
     },
     invisible = {
-        colour = Vector3(255, 25.5, 25.5),
+        colour = {0/255, 0/255, 0/255, 0},
     },
     meatball = {
-        colour = Vector3(255, 25.5, 25.5),
+        colour = {0/255, 0/255, 0/255, 0},
     },
     coconut = {
-        colour = Vector3(255, 25.5, 25.5),
+        colour = {0/255, 0/255, 0/255, 0},
     },
 }
 

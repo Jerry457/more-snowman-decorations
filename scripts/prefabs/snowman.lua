@@ -1,5 +1,6 @@
 local SnowmanDecoratable = require("components/snowmandecoratable")
 local SetSnowmanSkin = require("snowman_utils").SetSnowmanSkin
+local SetUpSprintTrail = require("snowman_trail").SetUpSprintTrail
 
 local assets =
 {
@@ -157,6 +158,10 @@ local function OnStopPushing(inst)
     inst.Transform:SetNoFaced()
     inst.Physics:Stop()
     inst.AnimState:PlayAnimation("ground_"..size)
+
+    if inst.SnowManEnableSprintTrail then
+        inst:SnowManEnableSprintTrail(false)
+    end
 end
 
 local function _SnowballTooBigWarning(inst, doer)
@@ -747,6 +752,9 @@ local function fn()
     inst.components.snowmandecoratable:SetOnStacksChangedFn(OnStacksChanged)
 
     inst.iswaxing = net_bool(inst.GUID, "snowman.iswaxing", "iswaxingdirty")
+
+    local colour = {0, 0, 0, 0}
+    SetUpSprintTrail(inst, colour)
 
     inst.entity:SetPristine()
 

@@ -55,7 +55,8 @@ local function CreateSprintTrailFx(inst)
 
 	fx.Transform:SetFourFaced()
 
-	fx.AnimState:SetBank("wilson")
+	-- fx.AnimState:SetBank("wilson")
+	fx.AnimState:SetBank("snowball")
 	fx.AnimState:UsePointFiltering(true)
     fx.AnimState:SetSortOrder(0)
 	fx.AnimState:SetScale(1.035, 1.035)
@@ -77,12 +78,7 @@ local function GetSprintTrailFx(inst)
 		fx = CreateSprintTrailFx(inst)
 	end
     fx.AnimState:SetAddColour(unpack(inst[COLOR_VAL]))
-
-    if inst.AnimState:GetSkinBuild() == "" then
-        fx.AnimState:SetBuild(inst.AnimState:GetBuild())
-    else
-        fx.AnimState:SetBuild(inst.prefab)
-    end
+    fx.AnimState:SetBuild(inst.AnimState:GetBuild())
 
 	--Reset the entity
 	fx.a = nil
@@ -134,19 +130,11 @@ end
 -- runs on clients too
 local function OnUpdateSprintTrail(inst, dt)
 	local bank, anim = inst.AnimState:GetHistoryData()
-	local arm_carry = inst.replica.inventory and inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 
 	if anim and inst.entity:IsVisible() then
 		local fx = GetSprintTrailFx(inst)
 		fx.entity:SetParent(inst.entity)
 		fx.AnimState:PlayAnimation(anim)
-		if arm_carry then
-			fx.AnimState:Show("ARM_carry")
-			fx.AnimState:Hide("ARM_normal")
-		else
-			fx.AnimState:Show("ARM_normal")
-			fx.AnimState:Hide("ARM_carry")
-		end
 		fx.AnimState:SetTime(inst.AnimState:GetCurrentAnimationTime())
 		fx.AnimState:Pause()
 		fx.x, fx.y, fx.z = inst.Transform:GetWorldPosition()

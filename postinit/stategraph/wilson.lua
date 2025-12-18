@@ -4,7 +4,6 @@ end
 
 local AddStategraphPostInit = AddStategraphPostInit
 GLOBAL.setfenv(1, GLOBAL)
-local TrailFns = require("snowman_trail")
 
 local function SetWorldVelocity(inst, angle, velocity, vy)
     vy = vy or 0
@@ -67,17 +66,6 @@ end
 AddStategraphPostInit("wilson", function(sg)
     if sg.states["pushing_walk"] == nil then
         return
-    end
-
-    local old_onenter = sg.states["pushing_walk"].onenter
-    sg.states["pushing_walk"].onenter = function(inst, target)
-        old_onenter(inst, target)
-        local trail_colour = {0, 0, 1, 0}
-        if target and target.trail_colour then
-            local r, g, b = target.trail_colour:Get()
-            trail_colour = {r/255, g/255, b/255, 0}
-        end
-        TrailFns.SetTrailColour(inst, trail_colour)
     end
 
     local old_onupdate = sg.states["pushing_walk"].onupdate
@@ -158,8 +146,8 @@ AddStategraphPostInit("wilson", function(sg)
                 local new_speed = old_speed + inc
                 target.components.pushable:SetOverridePushingSpeed(new_speed)
                 -- 启用残影
-                if EnableTrailCheck(old_speed, new_speed) then
-                    inst:SnowManEnableSprintTrail(true)
+                if EnableTrailCheck(old_speed, new_speed) and target.SnowManEnableSprintTrail then
+                    target:SnowManEnableSprintTrail(true)
                 end
             end
         end
@@ -175,12 +163,5 @@ AddStategraphPostInit("wilson", function(sg)
                 break
             end
         end
-    end
-
-    local old_onexit = sg.states["pushing_walk"].onexit
-    sg.states["pushing_walk"].onexit = function(inst)
-        old_onexit(inst)
-        -- 关闭残影
-        inst:SnowManEnableSprintTrail(false)
     end
 end)
