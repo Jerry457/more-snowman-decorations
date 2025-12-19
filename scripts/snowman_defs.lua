@@ -190,7 +190,6 @@ local MoreDecorations = {
     lightninggoathorn = { canflip = true },
     meat_dried = { canflip = true },
     messagebottle = { canflip = true },
-    messagebottleempty = { canflip = true },
     monstermeat_dried = { canflip = true },
     mosquitofertilizer = { canflip = true },
     nightmare_timepiece = { canflip = true },
