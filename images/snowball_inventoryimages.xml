@@ -1,17 +1,18 @@
 <Atlas>
     <Texture filename="snowball_inventoryimages.tex" />
     <Elements>
-        <Element name="snowball_item_coconut.tex" u1="0.001953125" v1="0.751953125" u2="0.248046875" v2="0.998046875" />
-        <Element name="snowball_item_dungball.tex" u1="0.251953125" v1="0.751953125" u2="0.498046875" v2="0.998046875" />
-        <Element name="snowball_item_icecream.tex" u1="0.501953125" v1="0.751953125" u2="0.748046875" v2="0.998046875" />
-        <Element name="snowball_item_invisible.tex" u1="0.751953125" v1="0.751953125" u2="0.998046875" v2="0.998046875" />
-        <Element name="snowball_item_meatball.tex" u1="0.001953125" v1="0.501953125" u2="0.248046875" v2="0.748046875" />
-        <Element name="snowball_item_tumbleweed.tex" u1="0.251953125" v1="0.501953125" u2="0.498046875" v2="0.748046875" />
-        <Element name="snowman_coconut.tex" u1="0.501953125" v1="0.501953125" u2="0.748046875" v2="0.748046875" />
-        <Element name="snowman_dungball.tex" u1="0.751953125" v1="0.501953125" u2="0.998046875" v2="0.748046875" />
-        <Element name="snowman_icecream.tex" u1="0.001953125" v1="0.251953125" u2="0.248046875" v2="0.498046875" />
-        <Element name="snowman_invisible.tex" u1="0.251953125" v1="0.251953125" u2="0.498046875" v2="0.498046875" />
-        <Element name="snowman_meatball.tex" u1="0.501953125" v1="0.251953125" u2="0.748046875" v2="0.498046875" />
-        <Element name="snowman_tumbleweed.tex" u1="0.751953125" v1="0.251953125" u2="0.998046875" v2="0.498046875" />
+        <Element name="shortcake.tex" u1="0.0009765625" v1="0.751953125" u2="0.1240234375" v2="0.998046875" />
+        <Element name="snowball_item_coconut.tex" u1="0.1259765625" v1="0.751953125" u2="0.2490234375" v2="0.998046875" />
+        <Element name="snowball_item_dungball.tex" u1="0.2509765625" v1="0.751953125" u2="0.3740234375" v2="0.998046875" />
+        <Element name="snowball_item_icecream.tex" u1="0.3759765625" v1="0.751953125" u2="0.4990234375" v2="0.998046875" />
+        <Element name="snowball_item_invisible.tex" u1="0.5009765625" v1="0.751953125" u2="0.6240234375" v2="0.998046875" />
+        <Element name="snowball_item_meatball.tex" u1="0.6259765625" v1="0.751953125" u2="0.7490234375" v2="0.998046875" />
+        <Element name="snowball_item_tumbleweed.tex" u1="0.7509765625" v1="0.751953125" u2="0.8740234375" v2="0.998046875" />
+        <Element name="snowman_coconut.tex" u1="0.8759765625" v1="0.751953125" u2="0.9990234375" v2="0.998046875" />
+        <Element name="snowman_dungball.tex" u1="0.0009765625" v1="0.501953125" u2="0.1240234375" v2="0.748046875" />
+        <Element name="snowman_icecream.tex" u1="0.1259765625" v1="0.501953125" u2="0.2490234375" v2="0.748046875" />
+        <Element name="snowman_invisible.tex" u1="0.2509765625" v1="0.501953125" u2="0.3740234375" v2="0.748046875" />
+        <Element name="snowman_meatball.tex" u1="0.3759765625" v1="0.501953125" u2="0.4990234375" v2="0.748046875" />
+        <Element name="snowman_tumbleweed.tex" u1="0.5009765625" v1="0.501953125" u2="0.6240234375" v2="0.748046875" />
     </Elements>
 </Atlas>

@@ -4,6 +4,10 @@ STRINGS.UI.CRAFTING_STATION_FILTERS.SNOWMAN_TECHNOLOGY = "Snowman"
 
 STRINGS.RECIPE_DESC.SNOWBALL_ITEM = "Choose your favorite snowball skin."
 
+STRINGS.NAMES.SHORTCAKE = "shortcake"
+STRINGS.RECIPE_DESC.SHORTCAKE = "A perfectly standard crispy cone, Never mind the ingredients."
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.SHORTCAKE = "Science can always explain it clearly."
+
 STRINGS.NAMES.SNOWBALL_SIZE_PREFIX = {
     SMALL = "",
     MED = "Med ",

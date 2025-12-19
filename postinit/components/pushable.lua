@@ -26,7 +26,7 @@ function Pushable:StopImmediately(doer)
 
     _StopPushing(self, doer)
     self:SetOverridePushingSpeed(nil)
-end
+end 
 
 function Pushable:StopPushing(doer)
     if self.stop_task then

@@ -1,5 +1,6 @@
 PrefabFiles = {
     "horrorfuel_core_fx",
+    "shortcake",
     "snowman",
     "snowman_decorate",
     "snowman_fxs",

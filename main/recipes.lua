@@ -20,3 +20,11 @@ GlassicAPI.AddRecipe(
     {},
     { "CRAFTING_STATION" }
 )
+
+GlassicAPI.AddRecipe(
+    "shortcake",
+    { Ingredient("twigs", 2) },
+    TECH.SNOWMAN_TECHNOLOGY,
+    {},
+    { "CRAFTING_STATION" }
+)

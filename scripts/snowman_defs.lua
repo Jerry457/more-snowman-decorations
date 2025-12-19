@@ -22,6 +22,7 @@ local SnowmanSkins = {
 
 local MoreDecorations = {
     watermelon = { canflip = true },
+    shortcake = { canflip = true },
     watermelon_cooked = { canflip = true },
     asparagus_cooked = { canflip = true },
     winter_ornament_plain1 = { canflip = true },
