@@ -120,8 +120,6 @@ local MoreDecorations = {
     malbatross_beak = { canflip = true },
     malbatross_feathered_weave = { canflip = true },
     moonbutterflywings = { canflip = true },
-    moon_cap_cooked = { canflip = true },
-    moon_cap = { canflip = true },
     moon_tree_blossom = { canflip = true },
     opalpreciousgem = { canflip = true },
     orangegem = { canflip = true },
@@ -205,7 +203,6 @@ local MoreDecorations = {
     plantmeat = { canflip = true },
     reviver = { canflip = true },
     smallmeat = { canflip = true },
-    watermelon = { canflip = true },
     waxpaper = { canflip = true },
     acorn_cooked = { canflip = true },
     acorn = { canflip = true },
@@ -307,8 +304,11 @@ local MoreDecorations = {
     wx78module_nightvision = { canflip = true },
     wx78module_taser = { canflip = true },
     spear = { canflip = true },
+    ancientfruit_nightvision = {
+        canflip = true,
+        custom_animation_num_rots = 16,
+    },
     ancientfruit_nightvision_cooked = { canflip = true },
-    alterguardianhatshard = { canflip = true },
     ghostlyelixir_attack = { canflip = true },
     ghostlyelixir_fastregen = { canflip = true },
     ghostlyelixir_lunar = { canflip = true },
@@ -318,8 +318,13 @@ local MoreDecorations = {
     ghostlyelixir_shield = { canflip = true },
     ghostlyelixir_slowregen = { canflip = true },
     ghostlyelixir_speed = { canflip = true },
+    alterguardianhatshard = {
+        canflip = true,
+        custom_animation_num_rots = 16,
+    },
     ghostflower = {
         canflip = true,
+        bloome_ffect = "shaders/anim.ksh",
         custom_animation_num_rots = 16,
     },
     moonglass_charged = {
