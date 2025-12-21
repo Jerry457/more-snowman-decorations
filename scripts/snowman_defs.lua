@@ -322,6 +322,25 @@ local MoreDecorations = {
         canflip = true,
         custom_animation_num_rots = 16,
     },
+    ghostflower = {
+        canflip = true,
+        bloome_ffect = "shaders/anim.ksh",
+        custom_animation_num_rots = 16,
+        fn = function(inst)
+            if not TheWorld.ismastersim or inst.dofx then
+                return
+            end
+
+            inst.dofx = function(inst)
+                local fx = SpawnPrefab("ghostflower_spirit"..tostring(math.random(2)).."_fx")
+                fx.entity:SetParent(inst.entity)
+                fx.Transform:SetPosition(0, 0, 0)
+                inst:DoTaskInTime(3 + math.random() * 6, inst.dofx) -- the min delay needs to be greater than the grow animation + it's delay
+            end
+            inst:dofx()
+            inst.AnimState:SetFrame(math.random(inst.AnimState:GetCurrentAnimationNumFrames()) - 1)
+        end
+    },
     moonglass_charged = {
         canflip = true,
         bloome_ffect = "shaders/anim.ksh",
@@ -425,7 +444,7 @@ local MoreDecorations = {
             if not TheWorld.ismastersim or inst.dofx then
                 return
             end
-            
+
             inst.dofx = function(inst)
                 local fx = SpawnPrefab("ghostflower_spirit"..tostring(math.random(2)).."_fx")
                 fx.entity:SetParent(inst.entity)
