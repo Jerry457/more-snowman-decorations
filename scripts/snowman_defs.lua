@@ -344,7 +344,7 @@ local MoreDecorations = {
             end
 
             inst.dofx = function(inst)
-                local fx = SpawnPrefab("ghostflower_spirit"..tostring(math.random(2)).."_fx")
+                local fx = SpawnPrefab("ghostflower_spirit" .. tostring(math.random(2)) .. "_fx")
                 fx.entity:SetParent(inst.entity)
                 fx.Transform:SetPosition(0, 0, 0)
                 inst:DoTaskInTime(3 + math.random()*6, inst.dofx) -- the min delay needs to be greater than the grow animation + it's delay
