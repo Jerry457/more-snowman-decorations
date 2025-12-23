@@ -1,18 +1,1 @@
-<Atlas>
-    <Texture filename="snowball_inventoryimages.tex" />
-    <Elements>
-        <Element name="shortcake.tex" u1="0.0009765625" v1="0.751953125" u2="0.1240234375" v2="0.998046875" />
-        <Element name="snowball_item_coconut.tex" u1="0.1259765625" v1="0.751953125" u2="0.2490234375" v2="0.998046875" />
-        <Element name="snowball_item_dungball.tex" u1="0.2509765625" v1="0.751953125" u2="0.3740234375" v2="0.998046875" />
-        <Element name="snowball_item_icecream.tex" u1="0.3759765625" v1="0.751953125" u2="0.4990234375" v2="0.998046875" />
-        <Element name="snowball_item_invisible.tex" u1="0.5009765625" v1="0.751953125" u2="0.6240234375" v2="0.998046875" />
-        <Element name="snowball_item_meatball.tex" u1="0.6259765625" v1="0.751953125" u2="0.7490234375" v2="0.998046875" />
-        <Element name="snowball_item_tumbleweed.tex" u1="0.7509765625" v1="0.751953125" u2="0.8740234375" v2="0.998046875" />
-        <Element name="snowman_coconut.tex" u1="0.8759765625" v1="0.751953125" u2="0.9990234375" v2="0.998046875" />
-        <Element name="snowman_dungball.tex" u1="0.0009765625" v1="0.501953125" u2="0.1240234375" v2="0.748046875" />
-        <Element name="snowman_icecream.tex" u1="0.1259765625" v1="0.501953125" u2="0.2490234375" v2="0.748046875" />
-        <Element name="snowman_invisible.tex" u1="0.2509765625" v1="0.501953125" u2="0.3740234375" v2="0.748046875" />
-        <Element name="snowman_meatball.tex" u1="0.3759765625" v1="0.501953125" u2="0.4990234375" v2="0.748046875" />
-        <Element name="snowman_tumbleweed.tex" u1="0.5009765625" v1="0.501953125" u2="0.6240234375" v2="0.748046875" />
-    </Elements>
-</Atlas>
+<Atlas><Texture filename="snowball_inventoryimages.tex" /><Elements><Element name="snowman_dungball.tex" u1="0.0009765625" u2="0.1240234375" v1="0.751953125" v2="0.998046875" /><Element name="snowball_item_dungball.tex" u1="0.1337890625" u2="0.2568359375" v1="0.751953125" v2="0.998046875" /><Element name="snowman_meatball.tex" u1="0.2666015625" u2="0.3896484375" v1="0.751953125" v2="0.998046875" /><Element name="snowball_item_tumbleweed.tex" u1="0.3994140625" u2="0.5224609375" v1="0.751953125" v2="0.998046875" /><Element name="snowman_coconut.tex" u1="0.5322265625" u2="0.6552734375" v1="0.751953125" v2="0.998046875" /><Element name="snowball_item_invisible.tex" u1="0.6650390625" u2="0.7880859375" v1="0.751953125" v2="0.998046875" /><Element name="snowman_maodie.tex" u1="0.7978515625" u2="0.9208984375" v1="0.751953125" v2="0.998046875" /><Element name="shortcake.tex" u1="0.0009765625" u2="0.1240234375" v1="0.486328125" v2="0.732421875" /><Element name="snowball_item_icecream.tex" u1="0.1337890625" u2="0.2568359375" v1="0.486328125" v2="0.732421875" /><Element name="snowman_tumbleweed.tex" u1="0.2666015625" u2="0.3896484375" v1="0.486328125" v2="0.732421875" /><Element name="snowball_item_coconut.tex" u1="0.3994140625" u2="0.5224609375" v1="0.486328125" v2="0.732421875" /><Element name="snowball_item_meatball.tex" u1="0.5322265625" u2="0.6552734375" v1="0.486328125" v2="0.732421875" /><Element name="snowman_invisible.tex" u1="0.6650390625" u2="0.7880859375" v1="0.486328125" v2="0.732421875" /><Element name="snowball_item_maodie.tex" u1="0.7978515625" u2="0.9208984375" v1="0.486328125" v2="0.732421875" /><Element name="snowman_icecream.tex" u1="0.0009765625" u2="0.1240234375" v1="0.220703125" v2="0.466796875" /></Elements></Atlas>

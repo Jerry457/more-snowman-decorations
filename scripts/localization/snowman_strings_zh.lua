@@ -37,6 +37,9 @@ STRINGS.SKIN_DESCRIPTIONS.snowball_item_meatball = "你这肉丸里面掺冰了�
 STRINGS.SKIN_NAMES.snowball_item_coconut = "椰球"
 STRINGS.SKIN_DESCRIPTIONS.snowball_item_coconut = "谁也不想砸在自己身上的是椰子。"
 
+STRINGS.SKIN_NAMES.snowball_item_maodie = "耄耋"
+STRINGS.SKIN_DESCRIPTIONS.snowball_item_maodie = "家里请什么都没用了"
+
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_I_MESSED_UP = "我搞砸了！"
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_TRY_MY_SNOWBALL = "试试我的雪球！"
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_BIG_SNOWBALL_IS_COMMING = "我才发现，雪球没有刹车！"

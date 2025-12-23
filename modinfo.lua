@@ -10,7 +10,7 @@ description = en_zh("V".. version ..
     "\n󰀔This mod completely revamps winter snowballs! \n󰀒Now you can decorate them with various in-game items, change their skins, and create your own unique snowball art. \n󰀐Build towering snowball structures or launch them at friends for chaotic fun—winter just got a lot more exciting!",
     "V" ..version.. "\n󰀔这个MOD对冬季的雪球进行了全面升级！\n󰀒现在，你可以用游戏中的各种物品自由装饰雪球，还能更换不同的皮肤，打造独一无二的雪球艺术。\n󰀐无论是堆叠成高塔，还是用来撞击朋友，都能让你的冬季冒险更加有趣！"
 )  --mod描述
-author = en_zh("Guto、jerry457","Guto、jerry457") --作者
+author = en_zh("Guto、jerry457、Jerusalem、王筱巫","Guto、jerry457、Jerusalem、王筱巫") --作者
 
 -- This is the URL name of the mod's thread on the forum; the part after the ? and before the first & in the url
 forumthread = ""

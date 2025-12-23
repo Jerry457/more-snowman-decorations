@@ -1,5 +1,5 @@
 local SnowmanSkins = {
-    -- 颜色需要配置
+    -- 雪球残影颜色
     dungball = {
         colour = {0/255, 0/255, 0/255, 0},
     },
@@ -16,6 +16,9 @@ local SnowmanSkins = {
         colour = {0/255, 0/255, 0/255, 0},
     },
     coconut = {
+        colour = {0/255, 0/255, 0/255, 0},
+    },
+    maodie = {
         colour = {0/255, 0/255, 0/255, 0},
     },
 }
