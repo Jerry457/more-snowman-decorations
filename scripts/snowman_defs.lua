@@ -210,6 +210,24 @@ local MoreDecorations = {
     acorn_cooked = { canflip = true },
     acorn = { canflip = true },
     batnose_cooked = { canflip = true },
+    slingshotammo_dreadstone = { canflip = true },
+    slingshotammo_freeze = { canflip = true },
+    slingshotammo_gelblob = { canflip = true },
+    slingshotammo_gold = { canflip = true },
+    slingshotammo_gunpowder = { canflip = true },
+    slingshotammo_honey = { canflip = true },
+    slingshotammo_lunarplanthusk = { canflip = true },
+    slingshotammo_marble = { canflip = true },
+    slingshotammo_moonglass = { canflip = true },
+    slingshotammo_poop = { canflip = true },
+    slingshotammo_rock = { canflip = true },
+    slingshotammo_slow = { canflip = true },
+    slingshotammo_stinger = { canflip = true },
+    slingshotammo_thulecite = { canflip = true },
+    trinket_1 = { canflip = true },
+    trunk_cooked = { canflip = true },
+    trunk_summer = { canflip = true },
+    trunk_winter = { canflip = true },
     batnose = { canflip = true },
     beefalowool = { canflip = true },
     beeswax = { canflip = true },
@@ -497,6 +515,18 @@ local MoreDecorations = {
             inst.AnimState:SetSymbolLightOverride("SparkleBit", .5)
             inst.AnimState:SetLightOverride(.1)
         end
+    },
+    slingshotammo_horrorfuel = {
+        canflip = true,
+        custom_animation_num_rots = 16,
+    },
+    slingshotammo_scrapfeather = {
+        canflip = true,
+        custom_animation_num_rots = 16,
+    },
+    slingshotammo_purebrilliance = {
+        canflip = true,
+        custom_animation_num_rots = 16,
     },
 }
 
