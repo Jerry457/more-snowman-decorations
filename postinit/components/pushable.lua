@@ -88,9 +88,13 @@ function Pushable:HandleCollision(pos, angle)
                 if ent.components.freezable then
                     ent.components.freezable:AddColdness(4, 1)
                 end
-                if ent.components.workable then
-                    ent.components.workable:Destroy(self.doer)
+
+                if SnowmanConfig.SNOWBALL_DESTROY_STRUCTURE then
+                    if ent.components.workable then
+                        ent.components.workable:Destroy(self.doer)
+                    end
                 end
+
                 if self.doer.components.talker then
                     self.doer.components.talker:Say(GetString(self.doer, str))
                 end

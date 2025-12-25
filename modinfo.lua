@@ -107,4 +107,11 @@ configuration_options = {
         },
         default = 10,
     },
+    {
+        name = "SNOWBALL_DESTROY_STRUCTURE",
+        label = en_zh("snowball can destroy structure", "推雪球可以摧毁建筑"),
+        hover = en_zh("snowball can destroy structure", "推雪球可以摧毁建筑"),
+        options = boolean_options,
+        default = true,
+    },
 }

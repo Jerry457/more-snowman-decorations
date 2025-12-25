@@ -5,6 +5,7 @@ SnowmanConfig = {
     MaxSnowmanSize = GetModConfigData("MaxSnowmanSize") or 3,
     MoreFunSnowball = GetModConfigData("MoreFunSnowball"),
     PUSHING_SNOWBALL_MAX_SPEED = GetModConfigData("PUSHING_SNOWBALL_MAX_SPEED") or 10,
+    SNOWBALL_DESTROY_STRUCTURE = GetModConfigData("SNOWBALL_DESTROY_STRUCTURE"),
 }
 GLOBAL.SnowmanConfig = SnowmanConfig
 
