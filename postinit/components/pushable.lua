@@ -26,7 +26,7 @@ function Pushable:StopImmediately(doer)
 
     _StopPushing(self, doer)
     self:SetOverridePushingSpeed(nil)
-end 
+end
 
 function Pushable:StopPushing(doer)
     if self.stop_task then
@@ -80,12 +80,17 @@ function Pushable:HandleCollision(pos, angle)
                 local str = "ANNOUNCE_I_MESSED_UP"
                 if ent.components.health and not ent.components.health:IsDead() then
                     if ent.components.combat then
-                        local damage = self:GetCollisionDamage()
-                        ent.components.combat:GetAttacked(self.doer, damage)
+                        if self.doer.components.combat:CanAttack(ent) then
+                            local damage = self:GetCollisionDamage()
+                            ent.components.combat:GetAttacked(self.doer, damage)
+                        end
                     end
                     str = "ANNOUNCE_TRY_MY_SNOWBALL"
                 end
-                if ent.components.freezable then
+
+                if ent:HasTag("player") then
+                    ent:PushEvent("knockback", { knocker = self.doer, radius = 6.5, strengthmult = 1.0, forcelanded = nil })
+                else
                     ent.components.freezable:AddColdness(4, 1)
                 end
 
