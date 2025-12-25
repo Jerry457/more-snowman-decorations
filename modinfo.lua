@@ -41,6 +41,7 @@ icon = "modicon.tex"
 
 -- The mod's tags displayed on the server list
 server_filter_tags = {  --服务器标签
+    "snowman"
 }
 
 local boolean_options = {
