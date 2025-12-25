@@ -16,28 +16,39 @@ STRINGS.NAMES.SNOWBALL_SIZE_PREFIX = {
     EPIC = "超级巨型无敌大",
 }
 
+for prefix, str in pairs(STRINGS.NAMES.SNOWBALL_SIZE_PREFIX) do
+    STRINGS.NAMES["SNOWMAN_" .. prefix .. "_RECIPE"] = str .. STRINGS.NAMES.SNOWBALL_ITEM
+end
+
 STRINGS.SKIN_TAG_CATEGORIES.COLLECTION.SNOWY = "雪系列"
 STRINGS.UI.RARITY.Snowy = "雪制品"
 
 STRINGS.SKIN_NAMES.snowball_item_dungball = "粪球"
+STRINGS.SKIN_NAMES.snowman_dungball = "粪球"
 STRINGS.SKIN_DESCRIPTIONS.snowball_item_dungball = "这雪球，一股子臭烘烘的味儿。"
 
 STRINGS.SKIN_NAMES.snowball_item_tumbleweed = "风滚球"
+STRINGS.SKIN_NAMES.snowman_tumbleweed = "风滚球"
 STRINGS.SKIN_DESCRIPTIONS.snowball_item_tumbleweed = "现在该我们来给它塞各种漂亮小垃圾了。"
 
 STRINGS.SKIN_NAMES.snowball_item_icecream = "冰激凌球"
+STRINGS.SKIN_NAMES.snowman_icecream = "冰激凌球"
 STRINGS.SKIN_DESCRIPTIONS.snowball_item_icecream = "现在你可以滚一个真正“甜蜜的雪球”了！"
 
 STRINGS.SKIN_NAMES.snowball_item_invisible = "皇帝的新球"
+STRINGS.SKIN_NAMES.snowman_invisible = "皇帝的新球"
 STRINGS.SKIN_DESCRIPTIONS.snowball_item_invisible = "聪明的人才能看得见。"
 
 STRINGS.SKIN_NAMES.snowball_item_meatball = "肉丸"
+STRINGS.SKIN_NAMES.snowman_meatball = "肉丸"
 STRINGS.SKIN_DESCRIPTIONS.snowball_item_meatball = "你这肉丸里面掺冰了吧！"
 
 STRINGS.SKIN_NAMES.snowball_item_coconut = "椰球"
+STRINGS.SKIN_NAMES.snowman_coconut = "椰球"
 STRINGS.SKIN_DESCRIPTIONS.snowball_item_coconut = "谁也不想砸在自己身上的是椰子。"
 
 STRINGS.SKIN_NAMES.snowball_item_maodie = "耄耋"
+STRINGS.SKIN_NAMES.snowman_maodie = "耄耋"
 STRINGS.SKIN_DESCRIPTIONS.snowball_item_maodie = "家里请什么都没用了"
 
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_SNOWBALL_MESSED = "我搞砸了！"

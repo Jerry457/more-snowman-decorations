@@ -22,6 +22,38 @@ GlassicAPI.AddRecipe(
 )
 
 GlassicAPI.AddRecipe(
+    "snowman_med_recipe",
+    { Ingredient("snowball_item", 3) },
+    TECH.SNOWMAN_TECHNOLOGY,
+    { placer = "snowman_med_recipe_placer", image = "snowman.tex", description = "snowball_item" },
+    { "CRAFTING_STATION" }
+)
+
+GlassicAPI.AddRecipe(
+    "snowman_large_recipe",
+    { Ingredient("snowball_item", 5) },
+    TECH.SNOWMAN_TECHNOLOGY,
+    { placer = "snowman_large_recipe_placer", image = "snowman.tex", description = "snowball_item" },
+    { "CRAFTING_STATION" }
+)
+
+GlassicAPI.AddRecipe(
+    "snowman_giant_recipe",
+    { Ingredient("snowball_item", 7) },
+    TECH.SNOWMAN_TECHNOLOGY,
+    { placer = "snowman_giant_recipe_placer", image = "snowman.tex", description = "snowball_item" },
+    { "CRAFTING_STATION" }
+)
+
+GlassicAPI.AddRecipe(
+    "snowman_epic_recipe",
+    { Ingredient("snowball_item", 9) },
+    TECH.SNOWMAN_TECHNOLOGY,
+    { placer = "snowman_epic_recipe_placer", image = "snowman.tex", description = "snowball_item" },
+    { "CRAFTING_STATION" }
+)
+
+GlassicAPI.AddRecipe(
     "shortcake",
     { Ingredient("twigs", 2) },
     TECH.SNOWMAN_TECHNOLOGY,
