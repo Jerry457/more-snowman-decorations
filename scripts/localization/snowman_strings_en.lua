@@ -40,6 +40,7 @@ STRINGS.SKIN_DESCRIPTIONS.snowball_item_coconut = "No one wants a coconut to fal
 STRINGS.SKIN_NAMES.snowball_item_maodie = "maodie"
 STRINGS.SKIN_DESCRIPTIONS.snowball_item_maodie = "Will you be a good kitty when you grow up?"
 
-STRINGS.CHARACTERS.GENERIC.ANNOUNCE_I_MESSED_UP = "I messed up!"
-STRINGS.CHARACTERS.GENERIC.ANNOUNCE_TRY_MY_SNOWBALL = "Try my snowball!"
+STRINGS.CHARACTERS.GENERIC.ANNOUNCE_SNOWBALL_MESSED = "I messed up!"
+STRINGS.CHARACTERS.GENERIC.ANNOUNCE_SNOWBALL_ATTACK = "Try my snowball!"
+STRINGS.CHARACTERS.GENERIC.ANNOUNCE_SNOWBALL_CRUSHING = "I thought it was a speed bump!"
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_BIG_SNOWBALL_IS_COMMING = "I just realized that the snowball has no brakes!"

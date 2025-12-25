@@ -71,13 +71,15 @@ end
 function Pushable:HandleCollision(pos, angle)
     -- 检测雪球前方范围是否有可碰撞的实体
     local forwardpos = GetDestByAngle(pos, angle, (self.mindist or 0) + 0.5)
-    local ents = TheSim:FindEntities(forwardpos.x, 0, forwardpos.z, 0.85, nil, NON_COLLAPSIBLE_TAGS, {"blocker", "_health"})
+    local ents = TheSim:FindEntities(forwardpos.x, 0, forwardpos.z, self.inst.Physics:GetRadius(0) * 1.5, nil, NON_COLLAPSIBLE_TAGS, {"blocker", "_health"})
+    local destory = false
     for i, ent in ipairs(ents) do
         local r = ent:GetPhysicsRadius(0)
         -- 只碰撞有一定物理半径 或 有生命的实体
-        if ent ~= self.inst and (r > 0.2 or ent.components.health) then
+        if ent ~= self.inst and (r > 0.2 or ent.components.health) and not ent.snowball_crushing_task then
+            local _destory = true
             if self.doer then
-                local str = "ANNOUNCE_I_MESSED_UP"
+                local str = "ANNOUNCE_SNOWBALL_MESSED"
                 if ent.components.health and not ent.components.health:IsDead() then
                     if ent.components.combat then
                         if self.doer.components.combat:CanAttack(ent) then
@@ -85,13 +87,17 @@ function Pushable:HandleCollision(pos, angle)
                             ent.components.combat:GetAttacked(self.doer, damage)
                         end
                     end
-                    str = "ANNOUNCE_TRY_MY_SNOWBALL"
+                    str = "ANNOUNCE_SNOWBALL_ATTACK"
                 end
 
-                if ent:HasTag("player") then
-                    ent:PushEvent("knockback", { knocker = self.doer, radius = 6.5, strengthmult = 1.0, forcelanded = nil })
-                else
+                if ent.components.freezable then
                     ent.components.freezable:AddColdness(4, 1)
+                end
+
+                if ent:HasTag("smallcreature") or (ent.sg and ent.sg:HasState("knockback")) then
+                    _destory = false
+                    ent:PushEvent("knockback", { knocker = self.doer, radius = 6.5, strengthmult = 1.0, forcelanded = nil })
+                    str = "ANNOUNCE_SNOWBALL_CRUSHING"
                 end
 
                 if SnowmanConfig.SNOWBALL_DESTROY_STRUCTURE then
@@ -103,12 +109,22 @@ function Pushable:HandleCollision(pos, angle)
                 if self.doer.components.talker then
                     self.doer.components.talker:Say(GetString(self.doer, str))
                 end
+
+                ent.snowball_crushing_task = ent:DoTaskInTime(1, function(inst)
+                    inst.snowball_crushing_task = nil
+                end)
+
+                if _destory then
+                    destory = true
+                end
             end
-            self:StopImmediately()
-            if self.inst.components.workable then
-                self.inst.components.workable:Destroy(self.inst)
-            end
-            break
+        end
+    end
+
+    if destory then
+        self:StopImmediately()
+        if self.inst.components.workable then
+            self.inst.components.workable:Destroy(self.inst)
         end
     end
 end
