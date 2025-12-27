@@ -4,7 +4,7 @@ local function en_zh(en, zh)  -- Other languages don't work
 end
 
 -- This information tells other players more about the mod
-version = "1.1.0" -- mod版本 上传mod需要两次的版本不一样
+version = "1.2.0" -- mod版本 上传mod需要两次的版本不一样
 name = en_zh("Ultra Deluxe Snowball Overhaul", "超级豪华魔改版雪球")  ---mod名字
 description = en_zh("V".. version ..
     "\n󰀔This mod completely revamps winter snowballs! \n󰀒Now you can decorate them with various in-game items, change their skins, and create your own unique snowball art. \n󰀐Build towering snowball structures or launch them at friends for chaotic fun—winter just got a lot more exciting!",
