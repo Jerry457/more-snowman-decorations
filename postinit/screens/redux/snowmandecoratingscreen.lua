@@ -141,3 +141,13 @@ function SnowmanDecoratingScreen:MoveDraggingItemTo(x, y, ...)
 
     return valid
 end
+
+local _OnControl = SnowmanDecoratingScreen.OnControl
+function SnowmanDecoratingScreen:OnControl(control, down, ...)
+    if not down and control == CONTROL_ROTATE_RIGHT --[[ key e ]] then
+        TheFrontEnd:GetSound():PlaySound("dontstarve/HUD/click_move")
+        self:SaveAndClose()
+        return true
+    end
+    return _OnControl(self, control, down, ...)
+end
