@@ -249,6 +249,7 @@ local MoreDecorations = {
     durian_cooked = { canflip = true },
     durian = { canflip = true },
     eel = { canflip = true },
+    ancientfruit_nightvision_cooked = { canflip = true },
     pondeel = {
         canflip = true,
         custom_animation_num_rots = 16,
@@ -338,7 +339,6 @@ local MoreDecorations = {
         canflip = true,
         custom_animation_num_rots = 16,
     },
-    ancientfruit_nightvision_cooked = { canflip = true },
     ghostlyelixir_attack = { canflip = true },
     ghostlyelixir_fastregen = { canflip = true },
     ghostlyelixir_lunar = { canflip = true },
@@ -426,10 +426,6 @@ local MoreDecorations = {
         custom_animation_num_rots = 16,
     },
     pondfish = {
-        canflip = true,
-        custom_animation_num_rots = 16,
-    },
-    ancienttree_nightvision_fruit = {
         canflip = true,
         custom_animation_num_rots = 16,
     },
@@ -527,6 +523,14 @@ local MoreDecorations = {
     slingshotammo_purebrilliance = {
         canflip = true,
         custom_animation_num_rots = 16,
+        use_point_filtering = true,
+        bloome_ffect = "shaders/anim.ksh",
+        fn = function(inst)
+            inst.AnimState:SetSymbolLightOverride("pb_energy_loop", .5)
+            inst.AnimState:SetSymbolLightOverride("pb_ray", .5)
+            inst.AnimState:SetSymbolLightOverride("SparkleBit", .5)
+            inst.AnimState:SetLightOverride(.1)
+        end
     },
 }
 
